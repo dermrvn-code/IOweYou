@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOweYou", "IOweYou\IOweYou.csproj", "{51B983B4-78E9-40EE-8053-5B6BC6192DDB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9E0C21C2-40E2-4B4B-A030-789134EAE594}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{51B983B4-78E9-40EE-8053-5B6BC6192DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51B983B4-78E9-40EE-8053-5B6BC6192DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51B983B4-78E9-40EE-8053-5B6BC6192DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51B983B4-78E9-40EE-8053-5B6BC6192DDB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
