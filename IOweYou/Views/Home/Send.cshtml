@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Send Money";
+}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h3 class="text-center">Send Money</h3>
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="recipient" class="form-label">Recipient Username</label>
+                        <input type="text" class="form-control" name="recipient" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Amount</label>
+                        <input type="number" class="form-control" name="amount" required>
+                    </div>
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Error</div>
+                    }
+                    <button type="submit" class="btn btn-primary w-100">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

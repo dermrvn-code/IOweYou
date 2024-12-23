@@ -1,0 +1,43 @@
+﻿@model IOweYou.ViewModels.RegisterViewModel
+@{
+     ViewBag.Title = "Register";
+ }
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h3 class="text-center">Register</h3>
+                <form method="post">
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">E-Mail</label>
+                        <input type="text" class="form-control" asp-for="Email">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label">Username</label>
+                        <input type="text" class="form-control" asp-for="Username">
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Password</label>
+                        <input type="password" class="form-control" asp-for="Password">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" asp-for="ConfirmPassword">
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Error</div>
+                    }
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="/login">Go back to Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
