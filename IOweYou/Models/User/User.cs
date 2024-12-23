@@ -10,6 +10,8 @@ public class User : Entity
     public string PasswordHash { get; set; }
 
     public Balance Balance { get; set; } = new Balance();
+    
+    public List<Transaction> Transactions { get; set; } = new List<Transaction>();
 
     public List<Claim> ToClaims()
     {

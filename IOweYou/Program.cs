@@ -1,7 +1,10 @@
 using System.Net;
+using IOweYou;
+using IOweYou.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,16 @@ builder.Services.AddMvc(options =>
 
     options.Filters.Add(new AuthorizeFilter(policy));
 });
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Database connection string is not configured in environment variables.");
+}
+builder.Services.AddDbContext<UserContext>(options =>
+    options.UseMySQL(connectionString));
+
+
 
 var app = builder.Build();
 
