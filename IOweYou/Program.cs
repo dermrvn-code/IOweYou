@@ -1,15 +1,14 @@
 using System.Net;
 using IOweYou;
 using IOweYou.Models;
+using IOweYou.Web.Repositories;
+using IOweYou.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-/*builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=paypalclone.db"));*/
 
 builder.Services.AddControllersWithViews();
 
@@ -37,11 +36,14 @@ builder.Services.AddMvc(options =>
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 if (string.IsNullOrEmpty(connectionString))
 {
-    throw new InvalidOperationException("Database connection string is not configured in environment variables.");
+    throw new InvalidOperationException("Database connection is not configured");
 }
-builder.Services.AddDbContext<UserContext>(options =>
+builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseMySQL(connectionString));
 
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 var app = builder.Build();

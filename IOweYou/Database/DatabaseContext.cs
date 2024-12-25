@@ -2,9 +2,9 @@
 
 namespace IOweYou.Models;
 
-public class UserContext : DbContext
+public class DatabaseContext : Microsoft.EntityFrameworkCore.DbContext
 {
-    public UserContext(DbContextOptions<UserContext> options) : base(options) { }
+    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
 
     public DbSet<User> Users { get; set; }
     public DbSet<Transaction> Transactions { get; set; }

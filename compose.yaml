@@ -8,8 +8,6 @@
       - "5000:80"
     depends_on:
       - db
-    environment:
-      - ConnectionStrings__DefaultConnection=Server=db;Database=ioweyou;User=root;Password=example;
 
   db:
     image: mysql:8.0

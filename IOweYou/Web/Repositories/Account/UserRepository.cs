@@ -1,46 +1,66 @@
 ﻿using IOweYou.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace IOweYou.Web.Repositories;
 
 public class UserRepository : IUserRepository
 {
-
-    public IEnumerable<User> GetAll()
-    {
-        return null;
-    }
-
-    public User GetSingle(Guid id)
-    {
-        return null;
-    }
-
-    public User Add(User entity)
-    {
-        return null;
-    }
-
-    public void Delete(Guid id)
-    {
-    }
     
-    public User Update(User entity){
-        return null;
+    private readonly DatabaseContext _context;
+
+    public UserRepository(DatabaseContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<List<User>> GetAll()
+    {
+        return await _context.Users.ToListAsync();
+    }
+
+    public async Task<User?> GetSingle(Guid id)
+    {
+        return await _context.Users.FindAsync(id);
+    }
+
+    public async Task<bool> Add(User entity)
+    {
+        var user = await _context.Users.AddAsync(entity);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> Delete(Guid id)
+    {
+        var user = await _context.Users.FindAsync(id);
+        if (user == null) return false;
         
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+        return true;
     }
     
-    public User FindByUsername(string username)
-    {
-        return null;
+    public async Task<bool> Update(User entity){
+
+        _context.Entry(entity).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+
+        return true;
+
     }
     
-    public User FindByEmail(string email)
+    public async Task<User?> FindByUsername(string username)
     {
-        return null;
+        return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
     
-    public User FindByLogin(string login, string password)
+    public async Task<User?> FindByEmail(string email)
     {
-        return null;
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+    }
+    
+    public async Task<User?> FindByLogin(string username, string passwordHash)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Username == username && u.PasswordHash == passwordHash);
     }
 }

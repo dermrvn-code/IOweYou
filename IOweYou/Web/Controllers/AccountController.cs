@@ -2,6 +2,7 @@
 using IOweYou.Models;
 using IOweYou.ViewModels;
 using IOweYou.Web.Repositories;
+using IOweYou.Web.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -14,12 +15,14 @@ using Microsoft.AspNetCore.Mvc;
 public class AccountController : Controller
 {
     private readonly ILogger<AccountController> _logger;
-    private readonly UserRepository _userRepository;
+    private readonly IUserService _userService;
+    private readonly PasswordHasher<object> _passwordHasher;
 
-    public AccountController(ILogger<AccountController> logger)
+    public AccountController(ILogger<AccountController> logger, IUserService userService)
     {
         _logger = logger;
-        _userRepository = new UserRepository();
+        _userService = userService;
+        _passwordHasher = new PasswordHasher<object>();
     }
     
     [HttpGet("register")]
@@ -29,19 +32,32 @@ public class AccountController : Controller
     }
     
     [HttpPost("register")]
-    public IActionResult Register([FromForm] RegisterViewModel register)
+    public async Task<IActionResult> Register([FromForm] RegisterViewModel register)
     {
-        /*if (ModelState.IsValid)
+        if (ModelState.IsValid)
         {
-            var existingUser = _context.Users.FirstOrDefault(u => u.Username == user.Username);
-            if (existingUser == null)
+            var existingUserUsername = await _userService.FindByUsername(register.Username);
+            if (existingUserUsername != null)
             {
-                _context.Users.Add(user);
-                _context.SaveChanges();
-                return RedirectToAction("Login");
+                ViewBag.ErrorMessage = "Username is already taken";
+                return View();
             }
-            ViewBag.Error = "Username already exists.";
-        }*/
+            
+            var existingUserEmail = await _userService.FindByEmail(register.Email);
+            if (existingUserEmail != null){
+                ViewBag.ErrorMessage = "Email is already taken";
+                return View();
+            }
+
+            var passwordHashed = _passwordHasher.HashPassword(null, register.Password);
+            var user = new User(register.Username, register.Email, passwordHashed);
+            
+            await _userService.Add(user);
+            
+            return Redirect("/login");
+            
+        }
+        
         return View();
     }
 
@@ -56,10 +72,20 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid)
             return View();
-        
-        var user = _userRepository.FindByLogin(login.Username, login.Password);
+
+        var user = await _userService.FindByUsername(login.Username);
         if (user is null)
-            return View("Login", login);
+        {
+            ViewBag.Error = "Invalid username or password";
+            return View();
+        }
+        
+        var passwordResult = _passwordHasher.VerifyHashedPassword(null, user.PasswordHash, login.Password);
+        if (passwordResult != PasswordVerificationResult.Success)
+        {
+            ViewBag.Error = "Invalid username or password";
+            return View();
+        }
         
         var claims = user.ToClaims();
         var claimsIdentity = new ClaimsIdentity(claims,
@@ -88,7 +114,7 @@ public class AccountController : Controller
         if (!ModelState.IsValid)
             return View();
         
-        var user = _userRepository.FindByEmail(fp.Email);
+        var user = _userService.FindByEmail(fp.Email);
         //if (user is not null)
             
         return View();

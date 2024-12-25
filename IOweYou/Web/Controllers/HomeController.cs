@@ -18,9 +18,10 @@ public class HomeController : Controller
     {
         //int userId = (int)TempData["UserId"];
         //var user = _context.Users.Find(userId);
-        var user = new User();
-        user.Username = "User";
-        return View(user);
+        //var user = new User();
+        //user.Username = "User";
+        //return View(user);
+        return View();
     }
     
     [Route("/transactions")]

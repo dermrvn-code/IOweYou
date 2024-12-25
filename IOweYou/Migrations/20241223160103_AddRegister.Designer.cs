@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IOweYou.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241223122114_Initial")]
-    partial class Initial
+    [Migration("20241223160103_AddRegister")]
+    partial class AddRegister
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

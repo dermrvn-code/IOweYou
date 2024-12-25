@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IOweYou.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(DatabaseContext))]
     partial class UserContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -18,17 +18,6 @@ namespace IOweYou.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("IOweYou.Models.Balance", b =>
-                {
-                    b.Property<int>("BalanceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.HasKey("BalanceId");
-
-                    b.ToTable("Balance");
-                });
 
             modelBuilder.Entity("IOweYou.Models.Transaction", b =>
                 {
@@ -58,9 +47,6 @@ namespace IOweYou.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("BalanceId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -75,8 +61,6 @@ namespace IOweYou.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("BalanceId");
-
                     b.ToTable("Users");
                 });
 
@@ -89,17 +73,6 @@ namespace IOweYou.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("IOweYou.Models.User", b =>
-                {
-                    b.HasOne("IOweYou.Models.Balance", "Balance")
-                        .WithMany()
-                        .HasForeignKey("BalanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Balance");
                 });
 
             modelBuilder.Entity("IOweYou.Models.User", b =>
