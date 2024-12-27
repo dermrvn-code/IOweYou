@@ -1,9 +1,10 @@
-﻿using IOweYou.Models;
+﻿using IOweYou.Database;
+using IOweYou.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace IOweYou;
+namespace IOweYou.Database;
 
 public class DatabaseController : ControllerBase
 {

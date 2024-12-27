@@ -1,4 +1,5 @@
-﻿using IOweYou.Models;
+﻿using System.Security.Claims;
+using IOweYou.Models;
 
 namespace IOweYou.Web.Repositories;
 
@@ -12,6 +13,7 @@ public interface IUserRepository
     Task<User?> FindByUsername(string username);
     Task<User?> FindByEmail(string email);
     Task<User?> FindByLogin(string login, string passwordHash);
-    
-    
+    Task<User?> GetUserByClaim(ClaimsPrincipal claim);
+
+
 }

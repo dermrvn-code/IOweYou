@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using IOweYou.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace IOweYou.Models;
+namespace IOweYou.Database;
 
-public class DatabaseContext : Microsoft.EntityFrameworkCore.DbContext
+public class DatabaseContext : DbContext
 {
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
 

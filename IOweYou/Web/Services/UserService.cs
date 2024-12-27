@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using IOweYou.Models;
 using IOweYou.Web.Repositories;
 
@@ -51,6 +52,11 @@ public class UserService : IUserService
     public async Task<User?> FindByLogin(string login, string passwordHash)
     {
         return await _userRepository.FindByLogin(login, passwordHash);
+    }
+
+    public async Task<User?> GetUserByClaim(ClaimsPrincipal claim)
+    {
+        return await _userRepository.GetUserByClaim(claim);
     }
     
     

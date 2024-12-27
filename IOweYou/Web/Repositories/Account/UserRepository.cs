@@ -1,4 +1,6 @@
-﻿using IOweYou.Models;
+﻿using System.Security.Claims;
+using IOweYou.Database;
+using IOweYou.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace IOweYou.Web.Repositories;
@@ -62,5 +64,23 @@ public class UserRepository : IUserRepository
     public async Task<User?> FindByLogin(string username, string passwordHash)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Username == username && u.PasswordHash == passwordHash);
+    }
+
+    public async Task<User?> GetUserByClaim(ClaimsPrincipal claim)
+    {
+        if (!(claim?.Identity?.IsAuthenticated ?? false))
+        {
+            return null;
+        }
+        
+        var ID = claim.FindFirst("ID")?.Value;
+
+        if (ID == null)
+        {
+            return null;
+        }
+
+        var user = await GetSingle(new Guid(ID));
+        return user;
     }
 }

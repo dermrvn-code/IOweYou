@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using IOweYou.Models;
 
 namespace IOweYou.Web.Services;
@@ -12,4 +13,5 @@ public interface IUserService
     Task<User?> FindByUsername(string username);
     Task<User?> FindByEmail(string email);
     Task<User?> FindByLogin(string login, string passwordHash);
+    Task<User?> GetUserByClaim(ClaimsPrincipal claim);
 }

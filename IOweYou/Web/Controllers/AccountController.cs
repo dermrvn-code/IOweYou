@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using IOweYou.Models;
-using IOweYou.ViewModels;
-using IOweYou.Web.Repositories;
+using IOweYou.ViewModels.Account;
 using IOweYou.Web.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -99,7 +98,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return Redirect("/Account/Login");
+        return Redirect("/login");
     }
 
     [HttpGet("forgotpassword")]
