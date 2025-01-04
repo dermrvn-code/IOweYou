@@ -15,11 +15,11 @@
                         <div>
                             <h3 class="card-title" style="margin: 0">@if (transaction.Received)
                                                                      {
-                                                                         @transaction.ReceiverId
+                                                                         @transaction.Partner.Username
                                                                      }
                                                                      else
                                                                      {
-                                                                         @transaction.SenderId
+                                                                         @transaction.User.Username
                                                                      }</h3>
                         </div>
                         <div class="text-center">
@@ -37,11 +37,11 @@
                         <div class="text-end">
                             <h3 class="card-title" style="margin: 0">@if (transaction.Received)
                                                                      {
-                                                                         @transaction.SenderId
+                                                                         @transaction.User.Username
                                                                      }
                                 else
                                                                      {
-                                                                         @transaction.ReceiverId
+                                                                         @transaction.Partner.Username
                                                                      }</h3>
                         </div>
                     </div>

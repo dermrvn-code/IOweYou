@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using IOweYou.Models.Transactions;
 
 namespace IOweYou.Models;
 
@@ -14,10 +15,12 @@ public class User : Entity
     public string Username { get; set; }
     public string Email { get; set; }
     public string PasswordHash { get; set; }
-
-    // public Balance Balance { get; set; } = new Balance();
+    public DateTime DateCreated { get; set; }
     
-    public List<Transaction> Transactions { get; set; } = new List<Transaction>();
+    public List<Transaction> Transactions { get; set; }
+    public List<Transaction> ExternalTransactions { get; set; }
+    public List<Balance> FromBalances { get; set; }
+    public List<Balance> ToBalances { get; set; }
 
     public List<Claim> ToClaims()
     {
