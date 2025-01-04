@@ -1,4 +1,6 @@
-﻿@{
+﻿@using IOweYou.Models.Shared
+@model IOweYou.ViewModels.Home.SendViewModel
+@{
     ViewBag.Title = "Send Money";
 }
 <div class="row justify-content-center">
@@ -8,12 +10,20 @@
                 <h3 class="text-center">Send Money</h3>
                 <form method="post">
                     <div class="mb-3">
-                        <label for="recipient" class="form-label">Recipient Username</label>
-                        <input type="text" class="form-control" name="recipient" required>
+                        <label asp-for="UserToSendTo" class="form-label">Recipient Username</label>
+                        <input type="text" class="form-control" id="recipient" autocomplete="off" asp-for="UserToSendTo">
+                        @await Html.PartialAsync("_SearchBar", new SearchBarViewModel()
+                        {
+                            Id = "recipient",
+                            Link = "/Search/Usernames"
+                        })
+                        <span asp-validation-for="UserToSendTo" class="text-danger"></span>
                     </div>
+                    
                     <div class="mb-3">
-                        <label for="amount" class="form-label">Amount</label>
-                        <input type="number" class="form-control" name="amount" required>
+                        <label asp-for="Value" class="form-label">Amount</label>
+                        <input type="number" class="form-control" asp-for="Value">
+                        <span asp-validation-for="Value" class="text-danger"></span>
                     </div>
                     @if (ViewBag.Error != null)
                     {
@@ -25,3 +35,4 @@
         </div>
     </div>
 </div>
+

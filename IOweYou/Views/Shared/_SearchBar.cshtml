@@ -1,0 +1,68 @@
+@model IOweYou.Models.Shared.SearchBarViewModel
+
+
+
+<div id="@Model.Id-results" class="dropdown-menu show" style="display: none; max-height: 200px; overflow-y: auto;"></div>
+
+
+<script>
+    
+    $(document).ready(function () {
+        console.log("Searchbar for @Model.Id loaded")
+        const searchBox = $("#@Model.Id");
+        const resultBox = $("#@Model.Id-results");
+
+        function updateDropdown(searchTerm){
+            $.ajax({
+                url: "@Model.Link",
+                type: "GET",
+                data: { searchTerm: searchTerm },
+                success: function (response) {
+                    console.log(response);
+
+                    if (response.length === 0) {
+                        resultBox.hide();
+                        return;
+                    }
+
+                    resultBox.empty();
+                    response.forEach(function (itemName) {
+                        let item = $("<div class='dropdown-item @Model.Id-item'>" + itemName + "</div>");
+                        item.on("click", function () {
+                            searchBox.val(itemName);
+                            resultBox.hide();
+                        });
+                        resultBox.append(item);
+                    });
+
+                    resultBox.show();
+                }
+            });
+        }
+
+        let typingTimer;
+        const typingDelay = 500;  // 2-second delay
+
+        searchBox.on("keyup", function () {
+            clearTimeout(typingTimer);  // Clear the timer on each keyup event
+
+            let searchTerm = $(this).val();
+
+            if (searchTerm === "") {
+                resultBox.hide();
+                return;
+            }
+
+            // Set a new timer that will trigger after 2 seconds of no typing
+            typingTimer = setTimeout(() => updateDropdown(searchTerm), typingDelay);  // Wait for 2 seconds before sending the request
+        });
+
+        $(document).on("click", function (e) {
+            if (!resultBox.is(e.target) && resultBox.has(e.target).length === 0 && !searchBox.is(e.target)) {
+                resultBox.hide();
+            }
+        });
+    });
+
+</script>
+

@@ -83,4 +83,14 @@ public class UserRepository : IUserRepository
         var user = await GetSingle(new Guid(ID));
         return user;
     }
+
+    public async Task<List<string>> FindUsernames(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            return await _context.Users.Select(u => u.Username).ToListAsync();
+        }
+        return await _context.Users.Where(u => u.Username.Contains(name))
+            .Select(u => u.Username).ToListAsync();
+    }
 }

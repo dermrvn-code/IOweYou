@@ -1,8 +1,9 @@
-﻿@{
+﻿@model User
+@{
     ViewBag.Title = "Dashboard";
 }
 <div class="text-center">
-    <h1>Welcome</h1>
+    <h1>Welcome @Model.Username</h1>
     <h3>Your Balance:</h3>
     <div class="mt-4">
         <a href="/send" class="btn btn-success">Send Money</a>

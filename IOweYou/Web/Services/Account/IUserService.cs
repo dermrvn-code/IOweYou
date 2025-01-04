@@ -14,4 +14,5 @@ public interface IUserService
     Task<User?> FindByEmail(string email);
     Task<User?> FindByLogin(string login, string passwordHash);
     Task<User?> GetUserByClaim(ClaimsPrincipal claim);
+    Task<List<string>> FindUsernames(string name);
 }

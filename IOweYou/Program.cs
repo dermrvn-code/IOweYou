@@ -1,9 +1,8 @@
-using System.Net;
-using IOweYou;
 using IOweYou.Database;
-using IOweYou.Models;
 using IOweYou.Web.Repositories;
+using IOweYou.Web.Repositories.Transaction;
 using IOweYou.Web.Services;
+using IOweYou.Web.Services.Transaction;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -45,6 +44,9 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 
 var app = builder.Build();

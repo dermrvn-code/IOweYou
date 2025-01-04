@@ -1,45 +1,46 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using IOweYou.Models;
+using IOweYou.ViewModels.Home;
+using IOweYou.Web.Services;
+using IOweYou.Web.Services.Transaction;
 
 namespace IOweYou.Web.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IUserService _userService;
+    private readonly ITransactionService _transactionService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IUserService userService, ITransactionService transactionService)
     {
         _logger = logger;
+        _userService = userService;
+        _transactionService = transactionService;
     }
     
     [Route("/dashboard")]
-    public IActionResult Dashboard()
+    public async Task<IActionResult> Dashboard()
     {
-        //int userId = (int)TempData["UserId"];
-        //var user = _context.Users.Find(userId);
-        //var user = new User();
-        //user.Username = "User";
-        //return View(user);
-        return View();
+        return await LoadViewWithUser();
     }
     
     [Route("/transactions")]
     [HttpGet]
-    public IActionResult Transactions()
+    public async Task<IActionResult> Transactions()
     {
-        return View();
+        return await LoadViewWithUser();
     }
     
-    [Route("/send")]
-    [HttpGet]
+    [HttpGet("/send")]
     public IActionResult Send()
     {
         return View();
     }
-
-    [HttpPost]
-    public IActionResult Send(string recipient, decimal amount)
+    
+    [HttpPost("/send")]
+    public async Task<IActionResult> Send([FromForm] SendViewModel send)
     {
         /*int senderId = (int)TempData["UserId"];
         var sender = _context.Users.Find(senderId);
@@ -71,4 +72,17 @@ public class HomeController : Controller
         ViewBag.Error = "Insufficient balance.";*/
         return View();
     }
+    
+    private async Task<IActionResult> LoadViewWithUser()
+    {
+        
+        var contextUser = HttpContext.User;
+        var user = await _userService.GetUserByClaim(contextUser);
+
+        if (user == null)
+            return Redirect("/logout");
+        
+        return View(user);
+    } 
+
 }

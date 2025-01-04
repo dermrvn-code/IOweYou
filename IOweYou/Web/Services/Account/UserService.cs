@@ -58,6 +58,11 @@ public class UserService : IUserService
     {
         return await _userRepository.GetUserByClaim(claim);
     }
+
+    public async Task<List<string>> FindUsernames(string name)
+    {
+        return await _userRepository.FindUsernames(name);
+    }
     
     
 }
