@@ -25,6 +25,18 @@
                         <input type="number" class="form-control" asp-for="Value">
                         <span asp-validation-for="Value" class="text-danger"></span>
                     </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Currency" class="form-label">Currency</label>
+                        <input type="text" class="form-control" id="currency" autocomplete="off" asp-for="Currency">
+                        @await Html.PartialAsync("_SearchBar", new SearchBarViewModel()
+                        {
+                            Id = "currency",
+                            Link = "/Search/Currencies"
+                        })
+                        <span asp-validation-for="Currency" class="text-danger"></span>
+                    </div>
+                    
                     @if (ViewBag.Error != null)
                     {
                         <div class="alert alert-danger">@ViewBag.Error</div>

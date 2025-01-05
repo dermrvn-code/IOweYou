@@ -61,6 +61,12 @@ builder.Services.AddScoped<IBalanceService, BalanceService>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var currencies = scope.ServiceProvider.GetRequiredService<ICurrencyService>();
+    await currencies.SyncCurrencies();
+}
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

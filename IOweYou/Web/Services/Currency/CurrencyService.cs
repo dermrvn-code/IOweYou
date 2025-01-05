@@ -11,6 +11,11 @@ public class CurrencyService : ICurrencyService
     {
         _currencyRepository = currencyRepository;
     }
+
+    public async Task SyncCurrencies()
+    {
+        await _currencyRepository.SyncCurrencies();
+    }
     
     public async Task<List<Models.Transactions.Currency>> GetAll()
     {
@@ -35,5 +40,15 @@ public class CurrencyService : ICurrencyService
     public async Task<bool> Update(Models.Transactions.Currency entity)
     {
         return await _currencyRepository.Update(entity);
+    }
+
+    public async Task<Models.Transactions.Currency?> GetByName(string name)
+    {
+        return await _currencyRepository.GetByName(name);
+    }
+
+    public async Task<List<string>> FindCurrencies(string name)
+    {
+        return await _currencyRepository.FindCurrencies(name);
     }
 }
