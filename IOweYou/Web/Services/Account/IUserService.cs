@@ -1,18 +1,10 @@
 using System.Security.Claims;
 using IOweYou.Models;
+using IOweYou.Web.Repositories;
+using IOweYou.Web.Repositories.Account;
 
-namespace IOweYou.Web.Services;
+namespace IOweYou.Web.Services.Account;
 
-public interface IUserService
+public interface IUserService: IUserRepository
 {
-    Task<IEnumerable<User>> GetAll();
-    Task<User?> GetSingle(Guid id);
-    Task<bool> Add(User entity);
-    Task<bool> Delete(Guid id);
-    Task<bool> Update(User entity);
-    Task<User?> FindByUsername(string username);
-    Task<User?> FindByEmail(string email);
-    Task<User?> FindByLogin(string login, string passwordHash);
-    Task<User?> GetUserByClaim(ClaimsPrincipal claim);
-    Task<List<string>> FindUsernames(string name);
 }

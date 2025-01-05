@@ -1,15 +1,11 @@
 ﻿using System.Security.Claims;
 using IOweYou.Models;
+using IOweYou.Web;
 
-namespace IOweYou.Web.Repositories;
+namespace IOweYou.Web.Repositories.Account;
 
-public interface IUserRepository
+public interface IUserRepository : IDbManagement<User>
 {
-    Task<List<User>> GetAll();
-    Task<User?> GetSingle(Guid id);
-    Task<bool> Add(User entity);
-    Task<bool> Delete(Guid id);
-    Task<bool> Update(User entity);
     Task<User?> FindByUsername(string username);
     Task<User?> FindByEmail(string email);
     Task<User?> FindByLogin(string login, string passwordHash);

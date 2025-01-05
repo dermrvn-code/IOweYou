@@ -1,6 +1,6 @@
 ﻿using IOweYou.Models.Transactions;
 
-namespace IOweYou.Models;
+namespace IOweYou.Models.Transactions;
 
 public class Transaction : Entity
 {

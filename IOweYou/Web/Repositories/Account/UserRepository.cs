@@ -3,11 +3,11 @@ using IOweYou.Database;
 using IOweYou.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace IOweYou.Web.Repositories;
+namespace IOweYou.Web.Repositories.Account;
 
 public class UserRepository : IUserRepository
 {
-    
+   
     private readonly DatabaseContext _context;
 
     public UserRepository(DatabaseContext context)
@@ -42,14 +42,14 @@ public class UserRepository : IUserRepository
         return true;
     }
     
-    public async Task<bool> Update(User entity){
-
+    public async Task<bool> Update(User entity)
+    {
         _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
-
         return true;
-
     }
+    
+    
     
     public async Task<User?> FindByUsername(string username)
     {

@@ -1,8 +1,9 @@
 using System.Security.Claims;
 using IOweYou.Models;
 using IOweYou.Web.Repositories;
+using IOweYou.Web.Repositories.Account;
 
-namespace IOweYou.Web.Services;
+namespace IOweYou.Web.Services.Account;
 
 public class UserService : IUserService
 {
@@ -14,7 +15,7 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public async Task<IEnumerable<User>> GetAll()
+    public async Task<List<User>> GetAll()
     {
         return await _userRepository.GetAll();
     }

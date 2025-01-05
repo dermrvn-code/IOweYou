@@ -1,7 +1,11 @@
 using IOweYou.Database;
-using IOweYou.Web.Repositories;
+using IOweYou.Web.Repositories.Account;
+using IOweYou.Web.Repositories.Balance;
+using IOweYou.Web.Repositories.Currency;
 using IOweYou.Web.Repositories.Transaction;
-using IOweYou.Web.Services;
+using IOweYou.Web.Services.Account;
+using IOweYou.Web.Services.Balance;
+using IOweYou.Web.Services.Currency;
 using IOweYou.Web.Services.Transaction;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -47,6 +51,12 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+
+builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+builder.Services.AddScoped<ICurrencyService, CurrencyService>();
+
+builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
+builder.Services.AddScoped<IBalanceService, BalanceService>();
 
 
 var app = builder.Build();

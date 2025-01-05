@@ -1,0 +1,39 @@
+using IOweYou.Web.Repositories.Balance;
+
+namespace IOweYou.Web.Services.Balance;
+
+public class BalanceService : IBalanceService
+{
+    
+    private readonly IBalanceRepository _balanceRepository;
+
+    public BalanceService(IBalanceRepository balanceRepository)
+    {
+        _balanceRepository = balanceRepository;
+    }
+
+    public async Task<List<Models.Transactions.Balance>> GetAll()
+    {
+        return await _balanceRepository.GetAll();
+    }
+
+    public async Task<Models.Transactions.Balance?> GetSingle(Guid id)
+    {
+        return await _balanceRepository.GetSingle(id);
+    }
+
+    public async Task<bool> Add(Models.Transactions.Balance entity)
+    {
+        return await _balanceRepository.Add(entity);
+    }
+
+    public async Task<bool> Delete(Guid id)
+    {
+        return await _balanceRepository.Delete(id);
+    }
+
+    public async Task<bool> Update(Models.Transactions.Balance entity)
+    {
+        return await _balanceRepository.Update(entity);
+    }
+}
