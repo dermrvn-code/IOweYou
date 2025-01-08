@@ -13,5 +13,29 @@ public class Transaction : Entity
     
     public Currency Currency { get; set; }
     public decimal Amount { get; set; }
-    public DateTime Date { get; set; } = DateTime.Now;
+    public DateTime Date { get; set; }
+    
+    public Transaction() {}
+
+    public Transaction(User user, User partner, Currency currency, decimal amount, bool received)
+    {
+        User = user;
+        UserId = user.ID;
+        Partner = partner;
+        PartnerId = partner.ID;
+        Currency = currency;
+        Amount = amount;
+        Received = received;
+    }
+    
+    public Transaction Invert()
+    {
+        return new Transaction(
+            user: Partner, 
+            partner: User, 
+            currency: Currency, 
+            amount: Amount,
+            received: !this.Received
+        );
+    }
 }

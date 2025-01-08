@@ -19,7 +19,59 @@ namespace IOweYou.Migrations
                 .HasAnnotation("ProductVersion", "7.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("IOweYou.Models.Transaction", b =>
+            modelBuilder.Entity("IOweYou.Models.Transactions.Balance", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("CurrencyId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("FromUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+
+                    b.Property<Guid>("ToUserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.HasIndex("FromUserId");
+
+                    b.HasIndex("ToUserId");
+
+                    b.ToTable("Balances");
+                });
+
+            modelBuilder.Entity("IOweYou.Models.Transactions.Currency", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("UnitValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Currencies");
+                });
+
+            modelBuilder.Entity("IOweYou.Models.Transactions.Transaction", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -56,58 +108,6 @@ namespace IOweYou.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("IOweYou.Models.Transactions.Balance", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("CurrencyId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("FromUserId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-
-                    b.Property<Guid>("ToUserId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CurrencyId");
-
-                    b.HasIndex("FromUserId");
-
-                    b.HasIndex("ToUserId");
-
-                    b.ToTable("Balance");
-                });
-
-            modelBuilder.Entity("IOweYou.Models.Transactions.Currency", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<decimal>("UnitValue")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Currency");
-                });
-
             modelBuilder.Entity("IOweYou.Models.User", b =>
                 {
                     b.Property<Guid>("ID")
@@ -115,7 +115,9 @@ namespace IOweYou.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime(6)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -134,7 +136,34 @@ namespace IOweYou.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("IOweYou.Models.Transaction", b =>
+            modelBuilder.Entity("IOweYou.Models.Transactions.Balance", b =>
+                {
+                    b.HasOne("IOweYou.Models.Transactions.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IOweYou.Models.User", "FromUser")
+                        .WithMany("FromBalances")
+                        .HasForeignKey("FromUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("IOweYou.Models.User", "ToUser")
+                        .WithMany("ToBalances")
+                        .HasForeignKey("ToUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Currency");
+
+                    b.Navigation("FromUser");
+
+                    b.Navigation("ToUser");
+                });
+
+            modelBuilder.Entity("IOweYou.Models.Transactions.Transaction", b =>
                 {
                     b.HasOne("IOweYou.Models.Transactions.Currency", "Currency")
                         .WithMany()
@@ -159,38 +188,6 @@ namespace IOweYou.Migrations
                     b.Navigation("Partner");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("IOweYou.Models.Transactions.Balance", b =>
-                {
-                    b.HasOne("IOweYou.Models.Transactions.Currency", "Currency")
-                        .WithMany("Balances")
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IOweYou.Models.User", "FromUser")
-                        .WithMany("FromBalances")
-                        .HasForeignKey("FromUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("IOweYou.Models.User", "ToUser")
-                        .WithMany("ToBalances")
-                        .HasForeignKey("ToUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Currency");
-
-                    b.Navigation("FromUser");
-
-                    b.Navigation("ToUser");
-                });
-
-            modelBuilder.Entity("IOweYou.Models.Transactions.Currency", b =>
-                {
-                    b.Navigation("Balances");
                 });
 
             modelBuilder.Entity("IOweYou.Models.User", b =>

@@ -29,9 +29,23 @@ public class SearchController : Controller
     }
     
     [HttpGet]
+    public async Task<IActionResult> Users()
+    {
+        var users = await _userService.GetAll();
+        return Json(users);
+    }
+    
+    [HttpGet]
     public async Task<IActionResult> Currencies(string searchTerm)
     {
         var currencies = await _currencyService.FindCurrencies(searchTerm);
         return Json(currencies);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> Transactions()
+    {
+        var transactions = await _transactionService.GetAll();
+        return Json(transactions);
     }
 }

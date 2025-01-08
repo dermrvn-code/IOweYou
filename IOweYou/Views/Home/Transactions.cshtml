@@ -1,26 +1,19 @@
-﻿@model User
+﻿@model List<IOweYou.Models.Transactions.Transaction>
 @{
     ViewBag.Title = "Transactions";
 }
 <h1 class="text-center">Transaction History</h1>
 
 <div class="container mt-4">
-    @if (@Model.Transactions.Count != 0)
+    @if (@Model.Count != 0)
     {
-        @foreach (var transaction in @Model.Transactions)
+        @foreach (var transaction in @Model)
         {
             <div class="card mb-3 shadow-sm px-4">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h3 class="card-title" style="margin: 0">@if (transaction.Received)
-                                                                     {
-                                                                         @transaction.Partner.Username
-                                                                     }
-                                                                     else
-                                                                     {
-                                                                         @transaction.User.Username
-                                                                     }</h3>
+                            <h3 class="card-title" style="margin: 0">@transaction.User.Username</h3>
                         </div>
                         <div class="text-center">
                             <h4 class="text-primary">@transaction.Amount</h4>
@@ -35,14 +28,7 @@
                             <p class="text-center" style="margin: 0; font-style: italic">@transaction.Date.ToString("MMMM, dd.mm.yyyy")</p>
                         </div>
                         <div class="text-end">
-                            <h3 class="card-title" style="margin: 0">@if (transaction.Received)
-                                                                     {
-                                                                         @transaction.User.Username
-                                                                     }
-                                else
-                                                                     {
-                                                                         @transaction.Partner.Username
-                                                                     }</h3>
+                            <h3 class="card-title" style="margin: 0">@transaction.Partner.Username</h3>
                         </div>
                     </div>
                 </div>

@@ -19,13 +19,33 @@ public class DatabaseContext : DbContext
         
         modelBuilder.Entity<User>()
             .HasMany(u => u.Transactions)
-            .WithOne(a => a.User)
+            .WithOne(t => t.User)
             .HasForeignKey(t => t.UserId);
-        
+
         modelBuilder.Entity<User>()
             .HasMany(u => u.ExternalTransactions)
-            .WithOne(a => a.Partner)
+            .WithOne(t => t.Partner)
             .HasForeignKey(t => t.PartnerId);
+        
+        modelBuilder.Entity<User>()
+            .Navigation(u => u.Transactions)
+            .AutoInclude();
+        
+        modelBuilder.Entity<User>()
+            .Navigation(u => u.ExternalTransactions)
+            .AutoInclude();
+        
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.FromBalances)
+            .WithOne(b => b.FromUser)
+            .HasForeignKey(b => b.FromUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.ToBalances)
+            .WithOne(b => b.ToUser)
+            .HasForeignKey(b => b.ToUserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<User>()
             .Property(u => u.DateCreated)
@@ -37,23 +57,9 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Transaction>()
             .Property(t => t.Date)
             .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-        
-        modelBuilder.Entity<Balance>()
-            .HasOne(b => b.FromUser)
-            .WithMany(u => u.FromBalances)
-            .HasForeignKey(b => b.FromUserId)
-            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Balance>()
-            .HasOne(b => b.ToUser)
-            .WithMany(u => u.ToBalances)
-            .HasForeignKey(b => b.ToUserId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Balance>()
-            .HasOne(b => b.Currency)
-            .WithMany(c => c.Balances)
-            .HasForeignKey(b => b.CurrencyId);
+            .HasOne(b => b.Currency);
 
         modelBuilder.Entity<Balance>()
             .Property(b => b.LastUpdated)

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Transactions;
 using Microsoft.AspNetCore.Mvc;
 using IOweYou.Models;
 using IOweYou.ViewModels.Home;
@@ -6,6 +7,7 @@ using IOweYou.Web.Services;
 using IOweYou.Web.Services.Account;
 using IOweYou.Web.Services.Currency;
 using IOweYou.Web.Services.Transaction;
+using Transaction = IOweYou.Models.Transactions.Transaction;
 
 namespace IOweYou.Web.Controllers;
 
@@ -34,7 +36,14 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Transactions()
     {
-        return await LoadViewWithUser();
+        var contextUser = HttpContext.User;
+        var user = await _userService.GetUserByClaim(contextUser);
+
+        if (user == null)
+            return Redirect("logout");
+
+        var transactions = await _transactionService.GetTransactionsFromUserID(user.ID);
+        return View(transactions);
     }
     
     [HttpGet("/send")]
@@ -43,44 +52,55 @@ public class HomeController : Controller
         ViewBag.CurrencyList = await _currencyService.GetAll();;
         return View();
     }
-    
+
     [HttpPost("/send")]
     public async Task<IActionResult> Send([FromForm] SendViewModel send)
     {
-        /*int senderId = (int)TempData["UserId"];
-        var sender = _context.Users.Find(senderId);
-        var receiver = _context.Users.FirstOrDefault(u => u.Username == recipient);
-
-        if (receiver == null)
-        {
-            ViewBag.ErrorMessage = "User not found.";
-            return View();
-        }
-
-        if (sender.Balance >= amount)
-        {
-            sender.Balance -= amount;
-            receiver.Balance += amount;
-
-            var transaction = new Transaction
+        if (ModelState.IsValid){
+            User partner = await _userService.FindByUsername(send.UserToSendTo);
+            if (partner == null)
             {
-                SenderId = senderId,
-                ReceiverId = receiver.Id,
-                Amount = amount
-            };
+                ViewBag.ErrorMessage = "User not found";
+                return View();
+            }
 
-            _context.Transactions.Add(transaction);
-            _context.SaveChanges();
+            if (send.Value <= 0)
+            {
+                ViewBag.ErrorMessage = "Please enter a value";
+                return View();
+            }
 
-            return RedirectToAction("Dashboard");
+            var currency = await _currencyService.GetByName(send.Currency);
+            if (currency == null)
+            {
+                ViewBag.ErrorMessage = "Currency not found";
+                return View();
+            }
+            
+            var contextUser = HttpContext.User;
+            var thisUser = await _userService.GetUserByClaim(contextUser);
+
+            if (thisUser == null) return Redirect("logout");
+            
+            var myTransaction = new Transaction(thisUser, partner, currency, (decimal)send.Value, false);
+            var partnerTransaction = myTransaction.Invert();
+            
+            thisUser.Transactions.Add(myTransaction);
+            partner.ExternalTransactions.Add(partnerTransaction);
+            
+            var success = await _userService.Update(thisUser) && await _userService.Update(partner);
+            if (!success)
+            {
+                ViewBag.ErrorMessage = "Problem with transaction";
+                return View();
+            }
         }
-        ViewBag.ErrorMessage = "Insufficient balance.";*/
+
         return View();
     }
     
     private async Task<IActionResult> LoadViewWithUser()
     {
-        
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
 
