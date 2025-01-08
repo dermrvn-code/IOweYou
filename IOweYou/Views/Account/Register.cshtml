@@ -28,9 +28,9 @@
                         <input type="password" class="form-control" asp-for="ConfirmPassword">
                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
-                    @if (ViewBag.Error != null)
+                    @if (ViewBag.ErrorMessage != null)
                     {
-                        <div class="alert alert-danger">@ViewBag.Error</div>
+                        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
                     }
                     <button type="submit" class="btn btn-primary w-100">Register</button>
                 </form>

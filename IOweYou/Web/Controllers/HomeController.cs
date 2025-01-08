@@ -4,6 +4,7 @@ using IOweYou.Models;
 using IOweYou.ViewModels.Home;
 using IOweYou.Web.Services;
 using IOweYou.Web.Services.Account;
+using IOweYou.Web.Services.Currency;
 using IOweYou.Web.Services.Transaction;
 
 namespace IOweYou.Web.Controllers;
@@ -13,12 +14,14 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IUserService _userService;
     private readonly ITransactionService _transactionService;
+    private readonly ICurrencyService _currencyService;
 
-    public HomeController(ILogger<HomeController> logger, IUserService userService, ITransactionService transactionService)
+    public HomeController(ILogger<HomeController> logger, IUserService userService, ITransactionService transactionService, ICurrencyService currencyService)
     {
         _logger = logger;
         _userService = userService;
         _transactionService = transactionService;
+        _currencyService = currencyService;
     }
     
     [Route("/dashboard")]
@@ -35,8 +38,9 @@ public class HomeController : Controller
     }
     
     [HttpGet("/send")]
-    public IActionResult Send()
+    public async Task<IActionResult> Send()
     {
+        ViewBag.CurrencyList = await _currencyService.GetAll();;
         return View();
     }
     
@@ -49,7 +53,7 @@ public class HomeController : Controller
 
         if (receiver == null)
         {
-            ViewBag.Error = "User not found.";
+            ViewBag.ErrorMessage = "User not found.";
             return View();
         }
 
@@ -70,7 +74,7 @@ public class HomeController : Controller
 
             return RedirectToAction("Dashboard");
         }
-        ViewBag.Error = "Insufficient balance.";*/
+        ViewBag.ErrorMessage = "Insufficient balance.";*/
         return View();
     }
     

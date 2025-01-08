@@ -36,16 +36,17 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            var existingUserUsername = await _userService.FindByUsername(register.Username);
-            if (existingUserUsername != null)
-            {
-                ViewBag.ErrorMessage = "Username is already taken";
-                return View();
-            }
             
             var existingUserEmail = await _userService.FindByEmail(register.Email);
             if (existingUserEmail != null){
                 ViewBag.ErrorMessage = "Email is already taken";
+                return View();
+            }
+            
+            var existingUserUsername = await _userService.FindByUsername(register.Username);
+            if (existingUserUsername != null)
+            {
+                ViewBag.ErrorMessage = "Username is already taken";
                 return View();
             }
 
@@ -76,14 +77,14 @@ public class AccountController : Controller
         var user = await _userService.FindByUsername(login.Username);
         if (user is null)
         {
-            ViewBag.Error = "Invalid username or password";
+            ViewBag.ErrorMessage = "Invalid username or password";
             return View();
         }
         
         var passwordResult = _passwordHasher.VerifyHashedPassword(null, user.PasswordHash, login.Password);
         if (passwordResult != PasswordVerificationResult.Success)
         {
-            ViewBag.Error = "Invalid username or password";
+            ViewBag.ErrorMessage = "Invalid username or password";
             return View();
         }
         
