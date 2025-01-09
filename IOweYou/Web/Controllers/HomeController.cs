@@ -42,7 +42,7 @@ public class HomeController : Controller
         if (user == null)
             return Redirect("logout");
 
-        var transactions = await _transactionService.GetTransactionsFromUserID(user.ID);
+        var transactions = await _transactionService.GetTransactionsFromUserId(user.ID);
         return View(transactions);
     }
     
@@ -57,7 +57,7 @@ public class HomeController : Controller
     public async Task<IActionResult> Send([FromForm] SendViewModel send)
     {
         if (ModelState.IsValid){
-            User partner = await _userService.FindByUsername(send.UserToSendTo);
+            User? partner = await _userService.FindByUsername(send.UserToSendTo);
             if (partner == null)
             {
                 ViewBag.ErrorMessage = "User not found";
@@ -81,14 +81,8 @@ public class HomeController : Controller
             var thisUser = await _userService.GetUserByClaim(contextUser);
 
             if (thisUser == null) return Redirect("logout");
-            
-            var myTransaction = new Transaction(thisUser, partner, currency, (decimal)send.Value, false);
-            var partnerTransaction = myTransaction.Invert();
-            
-            thisUser.Transactions.Add(myTransaction);
-            partner.ExternalTransactions.Add(partnerTransaction);
-            
-            var success = await _userService.Update(thisUser) && await _userService.Update(partner);
+
+            var success = await _transactionService.CreateTransaction(thisUser, partner, currency, (decimal)send.Value);
             if (!success)
             {
                 ViewBag.ErrorMessage = "Problem with transaction";

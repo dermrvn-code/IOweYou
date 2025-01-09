@@ -16,7 +16,7 @@
                             <h3 class="card-title" style="margin: 0">@transaction.User.Username</h3>
                         </div>
                         <div class="text-center">
-                            <h4 class="text-primary">@transaction.Amount</h4>
+                            <h4 class="text-primary">@transaction.Amount @transaction.Currency.Name</h4>
                             @if (transaction.Received)
                             {
                                 <span class="arrow left"></span>
@@ -25,7 +25,7 @@
                             {
                                 <span class="arrow right"></span>
                             }
-                            <p class="text-center" style="margin: 0; font-style: italic">@transaction.Date.ToString("MMMM, dd.mm.yyyy")</p>
+                            <p class="text-center" style="margin: 0; font-style: italic">@transaction.Date.ToString("ddd, dd.MM.yyyy")</p>
                         </div>
                         <div class="text-end">
                             <h3 class="card-title" style="margin: 0">@transaction.Partner.Username</h3>

@@ -45,5 +45,18 @@ public class BalanceRepository : IBalanceRepository
         await _context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<Models.Transactions.Balance?> GetBalanceByTransaction(Models.Transactions.Transaction transaction)
+    {
+        return await _context.Balances.Where(
+                b => b.CurrencyId == transaction.Currency.ID
+                     && b.FromUserId == transaction.User.ID
+                     && b.ToUserId == transaction.Partner.ID
+                    )
+                .Include(b => b.Currency) 
+                .Include(b => b.FromUser) 
+                .Include(b => b.ToUser)
+                .FirstOrDefaultAsync();
+    }
     
 }

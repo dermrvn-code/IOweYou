@@ -36,4 +36,9 @@ public class BalanceService : IBalanceService
     {
         return await _balanceRepository.Update(entity);
     }
+
+    public async Task<Models.Transactions.Balance?> GetBalanceByTransaction(Models.Transactions.Transaction transaction)
+    {
+        return await _balanceRepository.GetBalanceByTransaction(transaction);
+    }
 }

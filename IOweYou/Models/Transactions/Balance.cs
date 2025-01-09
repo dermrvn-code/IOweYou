@@ -10,4 +10,14 @@ public class Balance : Entity
     public Currency Currency { get; set; }
     public decimal Amount { get; set; } 
     public DateTime LastUpdated { get; set; }
+    
+    public Balance() { }
+    
+    public Balance(User fromUser, User toUser, Currency currency, decimal amount)
+    {
+        FromUser = fromUser;
+        ToUser = toUser;
+        Currency = currency;
+        Amount = amount;
+    }
 }

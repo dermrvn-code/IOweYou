@@ -11,10 +11,8 @@ public class User : Entity
     public string PasswordHash { get; set; }
     public DateTime DateCreated { get; set; }
     
-    public List<Transaction> Transactions { get; set; }
-    public List<Transaction> ExternalTransactions { get; set; }
-    public List<Balance> FromBalances { get; set; }
-    public List<Balance> ToBalances { get; set; }
+    public List<Transaction> Transactions { get; set; } = new List<Transaction>();
+    public List<Balance> Balances { get; set; } = new List<Balance>();
 
     public List<Claim> ToClaims()
     {

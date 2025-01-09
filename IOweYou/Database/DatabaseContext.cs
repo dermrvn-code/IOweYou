@@ -21,38 +21,27 @@ public class DatabaseContext : DbContext
             .HasMany(u => u.Transactions)
             .WithOne(t => t.User)
             .HasForeignKey(t => t.UserId);
-
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.ExternalTransactions)
-            .WithOne(t => t.Partner)
-            .HasForeignKey(t => t.PartnerId);
         
         modelBuilder.Entity<User>()
             .Navigation(u => u.Transactions)
             .AutoInclude();
         
         modelBuilder.Entity<User>()
-            .Navigation(u => u.ExternalTransactions)
-            .AutoInclude();
-        
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.FromBalances)
+            .HasMany(u => u.Balances)
             .WithOne(b => b.FromUser)
             .HasForeignKey(b => b.FromUserId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.ToBalances)
-            .WithOne(b => b.ToUser)
-            .HasForeignKey(b => b.ToUserId)
-            .OnDelete(DeleteBehavior.Restrict);
-
+        
         modelBuilder.Entity<User>()
             .Property(u => u.DateCreated)
             .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
         modelBuilder.Entity<Transaction>()
             .HasOne(t => t.Currency);
+        
+        modelBuilder.Entity<Transaction>()
+            .Navigation(t => t.Currency)
+            .AutoInclude();
 
         modelBuilder.Entity<Transaction>()
             .Property(t => t.Date)

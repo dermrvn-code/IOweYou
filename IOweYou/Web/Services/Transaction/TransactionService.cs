@@ -1,3 +1,4 @@
+using IOweYou.Models;
 using IOweYou.Web.Repositories.Transaction;
 
 namespace IOweYou.Web.Services.Transaction;
@@ -37,9 +38,14 @@ public class TransactionService : ITransactionService
         return await _transactionRepository.Update(entity);
     }
 
-    public async Task<List<Models.Transactions.Transaction>> GetTransactionsFromUserID(Guid userId)
+    public async Task<List<Models.Transactions.Transaction>> GetTransactionsFromUserId(Guid userId)
     {
-        return await _transactionRepository.GetTransactionsFromUserID(userId);
+        return await _transactionRepository.GetTransactionsFromUserId(userId);
+    }
+
+    public async Task<bool> CreateTransaction(User user, User partner, Models.Transactions.Currency currency, decimal amount)
+    {
+        return await _transactionRepository.CreateTransaction(user, partner, currency, amount);
     }
 
     
