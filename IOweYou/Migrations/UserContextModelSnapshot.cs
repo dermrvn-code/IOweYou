@@ -35,9 +35,7 @@ namespace IOweYou.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("ToUserId")
                         .HasColumnType("char(36)");
@@ -84,9 +82,7 @@ namespace IOweYou.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("Date")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("PartnerId")
                         .HasColumnType("char(36)");
@@ -115,9 +111,7 @@ namespace IOweYou.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -145,15 +139,15 @@ namespace IOweYou.Migrations
                         .IsRequired();
 
                     b.HasOne("IOweYou.Models.User", "FromUser")
-                        .WithMany("FromBalances")
+                        .WithMany("Balances")
                         .HasForeignKey("FromUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("IOweYou.Models.User", "ToUser")
-                        .WithMany("ToBalances")
+                        .WithMany()
                         .HasForeignKey("ToUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Currency");
@@ -172,7 +166,7 @@ namespace IOweYou.Migrations
                         .IsRequired();
 
                     b.HasOne("IOweYou.Models.User", "Partner")
-                        .WithMany("ExternalTransactions")
+                        .WithMany()
                         .HasForeignKey("PartnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -192,11 +186,7 @@ namespace IOweYou.Migrations
 
             modelBuilder.Entity("IOweYou.Models.User", b =>
                 {
-                    b.Navigation("ExternalTransactions");
-
-                    b.Navigation("FromBalances");
-
-                    b.Navigation("ToBalances");
+                    b.Navigation("Balances");
 
                     b.Navigation("Transactions");
                 });

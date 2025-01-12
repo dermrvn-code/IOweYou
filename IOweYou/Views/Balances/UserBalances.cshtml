@@ -12,7 +12,7 @@
         <div class="card mb-3 shadow-sm px-4">
             <div class="card-body">
                 <ul class="list-group compact-list mt-3" style="list-style: none; padding: 0;">
-                    @await Html.PartialAsync("Partials/_Balance", @Model)
+                    @await Html.PartialAsync("_Balance", @Model)
                  </ul>
             </div>
         </div>
@@ -24,7 +24,3 @@
         </div>
     }
 </div>
-
-<script>
-    $('.cstm-hr:last').hide();
-</script>

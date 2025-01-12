@@ -42,6 +42,7 @@ public class BalanceRepository : IBalanceRepository
 
     public async Task<bool> Update(Models.Transactions.Balance entity)
     {
+        entity.LastUpdated = DateTime.Now;
         _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
         return true;

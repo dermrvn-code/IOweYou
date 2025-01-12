@@ -9,7 +9,7 @@
     {
         @foreach (var transaction in @Model)
         {
-            @await Html.PartialAsync("Partials/_Transaction", transaction)
+            @await Html.PartialAsync("_Transaction", transaction)
         }
     }
     else

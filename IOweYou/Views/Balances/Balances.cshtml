@@ -16,9 +16,9 @@
                     <div class="card-body">
                         <h3 class="card-title text-center text-primary"><a href="/user/@user.Username">@user.Username</a></h3>
                         <ul class="list-group compact-list mt-3" style="list-style: none; padding: 0;">
-                            @await Html.PartialAsync("Partials/_Balance", group.Take(3).ToList())
+                            @await Html.PartialAsync("_Balance", group.Take(3).ToList())
                         </ul>
-                        <a class="btn btn-sm btn-outline-secondary mt-3 w-100" href="balances/@user.ID">See More</a>
+                        <a class="btn btn-sm btn-outline-secondary mt-3 w-100" href="/balances/@user.ID">See More</a>
                     </div>
                 </div>
             }
@@ -30,7 +30,3 @@
         </div>
     }
 </div>
-
-<script>
-    $('.cstm-hr:last').hide();
-</script>

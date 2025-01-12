@@ -26,6 +26,7 @@ public class Transaction : Entity
         Currency = currency;
         Amount = amount;
         Received = received;
+        Date = DateTime.Now;
     }
     
     public Transaction Invert()

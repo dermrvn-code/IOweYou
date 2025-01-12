@@ -2,7 +2,6 @@ using System.Diagnostics;
 using System.Transactions;
 using Microsoft.AspNetCore.Mvc;
 using IOweYou.Models;
-using IOweYou.ViewModels.Balances;
 using IOweYou.ViewModels.Home;
 using IOweYou.Web.Services;
 using IOweYou.Web.Services.Account;
@@ -36,12 +35,11 @@ public class BalancesController : Controller
     [Route("/balances")]
     public async Task<IActionResult> Balances()
     {
-        
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
-            
         if(user == null) return Redirect("logout");
 
+        
         var balances = await _balanceService.GetBalancesFromUser(user, excludeZeros: true);
         return View(balances);
     }

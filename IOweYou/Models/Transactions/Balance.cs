@@ -19,5 +19,6 @@ public class Balance : Entity
         ToUser = toUser;
         Currency = currency;
         Amount = amount;
+        LastUpdated = DateTime.Now;
     }
 }

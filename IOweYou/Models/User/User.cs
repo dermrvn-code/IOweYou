@@ -29,6 +29,7 @@ public class User : Entity
         Username = username;
         Email = email;
         PasswordHash = passwordHash;
+        DateCreated = DateTime.Now;
     }
 }
 

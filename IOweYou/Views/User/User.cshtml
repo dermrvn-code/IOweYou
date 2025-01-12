@@ -1,0 +1,64 @@
+@model IOweYou.ViewModels.User.UserPageViewModel
+@{
+    var user = @Model.User;
+    var transactions = @Model.Transactions;
+    var balances = @Model.Balances;
+    ViewBag.Title = @user.Username;
+}
+<h1 class="text-center text-primary">@user.Username</h1>
+
+<p class="text-center text-secondary">Created at @user.DateCreated.ToString("dd.MM.yyyy")</p>
+
+
+<div class="container mt-4">
+
+    <div class="card mb-5 shadow-sm px-4">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-3">Your Balances</h3>
+
+            @if (@balances.Count > 0)
+            {
+
+                <div class="card mb-3 shadow-sm px-4">
+                    <div class="card-body">
+                        <ul class="list-group compact-list mt-3" style="list-style: none; padding: 0;">
+                            @await Html.PartialAsync("_Balance", @balances)
+                        </ul>
+                    </div>
+                </div>
+                <a class="btn btn-sm btn-outline-secondary w-100" href="/balances/@user.ID">See More</a>
+            }
+            else
+            {
+                <div class="alert alert-info text-center" role="alert">
+                    You have no outstanding Balances
+                </div>
+            }
+            
+            
+        </div>
+    </div>
+
+    <div class="card mb-5 shadow-sm px-4">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-3">Your Transactions</h3>
+            
+            @if (@transactions.Count > 0)
+            {
+                @foreach (var transaction in @transactions)
+                {
+                    @await Html.PartialAsync("_Transaction", transaction)
+                }
+                <a class="btn btn-sm btn-outline-secondary w-100" href="/transactions/@user.ID">See More</a>
+            }
+            else
+            {
+                <div class="alert alert-info text-center" role="alert">
+                    You have no outstanding Transactions
+                </div>
+            }
+            
+        </div>
+    </div>
+    
+</div>

@@ -27,10 +27,6 @@ public class DatabaseContext : DbContext
             .WithOne(b => b.FromUser)
             .HasForeignKey(b => b.FromUserId)
             .OnDelete(DeleteBehavior.Restrict);
-        
-        modelBuilder.Entity<User>()
-            .Property(u => u.DateCreated)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
         modelBuilder.Entity<Transaction>()
             .HasOne(t => t.Currency);
@@ -39,15 +35,7 @@ public class DatabaseContext : DbContext
             .Navigation(t => t.Currency)
             .AutoInclude();
 
-        modelBuilder.Entity<Transaction>()
-            .Property(t => t.Date)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-
         modelBuilder.Entity<Balance>()
             .HasOne(b => b.Currency);
-
-        modelBuilder.Entity<Balance>()
-            .Property(b => b.LastUpdated)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
     }
 }
