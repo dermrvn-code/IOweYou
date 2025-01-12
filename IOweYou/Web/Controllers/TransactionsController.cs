@@ -85,6 +85,8 @@ public class TransactionsController : Controller
     [HttpPost("/send")]
     public async Task<IActionResult> Send([FromForm] SendViewModel send)
     {
+        ViewBag.CurrencyList = await _currencyService.GetAll();
+        
         if (ModelState.IsValid){
             User? partner = await _userService.FindByUsername(send.UserToSendTo);
             if (partner == null)
@@ -122,6 +124,10 @@ public class TransactionsController : Controller
                 ViewBag.ErrorMessage = "Problem with transaction";
                 return View();
             }
+            
+            // TODO find a better solution to this
+            TempData["InfoBanner"] = "Send " + send.Value + " " + send.Currency + " to " + partner.Username;
+            return Redirect("/");
         }
 
         return View();

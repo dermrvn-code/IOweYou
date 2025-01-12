@@ -36,7 +36,7 @@ public class UserController : Controller
         var thisUser = await _userService.GetUserByClaim(contextUser);
         if(thisUser == null) return Redirect("logout");
         
-        if(thisUser.Username == username) return Redirect("/account");
+        if(thisUser.Username == username){return Redirect("/account");}
         
         if (username == null) return BadRequest();
         var user = await _userService.FindByUsername(username);

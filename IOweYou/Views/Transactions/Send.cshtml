@@ -17,6 +17,7 @@
                         {
                             Id = "recipient",
                             Link = "/Search/Usernames",
+                            SendOnClick = false
                         })
                         <span asp-validation-for="UserToSendTo" class="text-danger"></span>
                     </div>
@@ -49,10 +50,12 @@
                     {
                         <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
                     }
+                    <div class="alert alert-secondary">Your new balance with dermrvn will be <span style="color:red">-3</span> Kebab</div>
                     <button type="submit" class="btn btn-primary w-100">Send</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 

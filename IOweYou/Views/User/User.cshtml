@@ -14,53 +14,49 @@
 
 <div class="container mt-4">
 
-    <div class="card mb-5 shadow-sm px-4">
-        <div class="card-body">
-            <h3 class="card-title text-center mb-3">Your Balances</h3>
+    <div class="container mb-5">
+        <h3 class="text-center mb-3">Your Balances</h3>
 
-            @if (@balances.Count > 0)
-            {
+        @if (@balances.Count > 0)
+        {
 
-                <div class="card mb-3 shadow-sm px-4">
-                    <div class="card-body">
-                        <ul class="list-group compact-list mt-3" style="list-style: none; padding: 0;">
-                            @await Html.PartialAsync("_Balance", @balances)
-                        </ul>
-                    </div>
+            <div class="card mb-3 shadow-sm px-4">
+                <div class="card-body">
+                    <ul class="list-group compact-list mt-3" style="list-style: none; padding: 0;">
+                        @await Html.PartialAsync("_Balance", @balances)
+                    </ul>
                 </div>
-                <a class="btn btn-sm btn-outline-secondary w-100" href="/balances/@user.ID">See More</a>
-            }
-            else
-            {
-                <div class="alert alert-info text-center" role="alert">
-                    You have no outstanding Balances
-                </div>
-            }
+            </div>
+            <a class="btn btn-sm btn-outline-secondary w-100" href="/balances/@user.ID">See More</a>
+        }
+        else
+        {
+            <div class="alert alert-info text-center" role="alert">
+                You have no outstanding Balances
+            </div>
+        }
             
             
-        </div>
     </div>
 
-    <div class="card mb-5 shadow-sm px-4">
-        <div class="card-body">
-            <h3 class="card-title text-center mb-3">Your Transactions</h3>
-            
-            @if (@transactions.Count > 0)
+    <div class="container mb-5">
+        <h3 class="text-center mb-3">Your Transactions</h3>
+        
+        @if (@transactions.Count > 0)
+        {
+            @foreach (var transaction in @transactions)
             {
-                @foreach (var transaction in @transactions)
-                {
-                    @await Html.PartialAsync("_Transaction", transaction)
-                }
-                <a class="btn btn-sm btn-outline-secondary w-100" href="/transactions/@user.ID">See More</a>
+                @await Html.PartialAsync("_Transaction", transaction)
             }
-            else
-            {
-                <div class="alert alert-info text-center" role="alert">
-                    You have no outstanding Transactions
-                </div>
-            }
-            
-        </div>
+            <a class="btn btn-sm btn-outline-secondary w-100" href="/transactions/@user.ID">See More</a>
+        }
+        else
+        {
+            <div class="alert alert-info text-center" role="alert">
+                You have no outstanding Transactions
+            </div>
+        }
+        
     </div>
     
 </div>
