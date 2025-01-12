@@ -55,8 +55,24 @@
 
         public async Task<List<Models.Transactions.Transaction>> GetTransactionsFromUserId(Guid userId)
         {
-            return await _context.Transactions.Where(t => t.UserId == userId).Include(t => t.User)  // Explicitly include User data
-                .Include(t => t.Partner).ToListAsync();
+            return await _context.Transactions.Where(
+                    t => t.UserId == userId)
+                .Include(t => t.User)
+                .Include(t => t.Partner)
+                .OrderByDescending(t => t.Date)
+                .ToListAsync();
+            
+        }
+
+        public async Task<List<Models.Transactions.Transaction>> GetTransactionsWithUser(User user, User partner)
+        {
+            return await _context.Transactions.Where(
+                    t => t.UserId == user.ID 
+                         && t.PartnerId == partner.ID)
+                .Include(t => t.User)
+                .Include(t => t.Partner)
+                .OrderByDescending(t => t.Date)
+                .ToListAsync();
             
         }
 

@@ -45,6 +45,22 @@ public class TransactionsController : Controller
         return View(transactions);
     }
     
+    
+    [Route("/transactions/{id?}")]
+    public async Task<IActionResult> UserTransactions(Guid? id)
+    {
+        var contextUser = HttpContext.User;
+        var user = await _userService.GetUserByClaim(contextUser);
+        if(user == null) return Redirect("logout");
+        
+        var partner = await _userService.GetSingle(id.GetValueOrDefault());
+        if(partner == null) return NotFound();
+        
+        ViewBag.Partner = partner;
+        var transactions = await _transactionService.GetTransactionsWithUser(user, partner);
+        return View(transactions);
+    }
+    
     [Route("/send")]
     public async Task<IActionResult> Send()
     {

@@ -1,15 +1,17 @@
 ﻿@model List<IOweYou.Models.Transactions.Transaction>
 @{
-    ViewBag.Title = "Transactions";
+    var username = @ViewBag.Partner.Username;
+    ViewBag.Title = "Transactions with "+username;
 }
-<h1 class="text-center">Transaction History</h1>
+
+<h1 class="text-center">Transactions with <a href="/user/@username" class="text-primary">@username</a></h1>
 
 <div class="container mt-4">
     @if (@Model.Count > 0)
     {
         @foreach (var transaction in @Model)
         {
-            @await Html.PartialAsync("Partials/_Transaction", transaction)
+            @await Html.PartialAsync("Partials/_Transaction", @transaction)
         }
     }
     else

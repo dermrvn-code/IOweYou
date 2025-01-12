@@ -57,14 +57,10 @@ public class BalancesController : Controller
 
         var partner = await _userService.GetSingle(id.GetValueOrDefault());
         if(partner == null) return NotFound(); 
-
+        
+        ViewBag.Partner = partner;
         var balances = await _balanceService.GetBalancesToUser(user, partner, excludeZeros: true);
-        return View(new UserBalancesViewModel()
-        {
-            FromUser = user,
-            ToUser = user,
-            Balances = balances
-        });
+        return View(balances);
     }
     
 }

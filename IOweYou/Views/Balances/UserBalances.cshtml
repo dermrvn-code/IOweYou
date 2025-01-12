@@ -1,17 +1,18 @@
-﻿@model IOweYou.ViewModels.Balances.UserBalancesViewModel
+﻿@model List<IOweYou.Models.Transactions.Balance>
 @{
-    ViewBag.Title = "Balances";
+    var username = @ViewBag.Partner.Username;
+    ViewBag.Title = "Balances with " + username;
 }
-<h1 class="text-center">Balances with <a href="/user/@Model.ToUser.Username" class="text-primary">@Model.ToUser.Username</a></h1>
+<h1 class="text-center">Balances with <a href="/user/@username" class="text-primary">@username</a></h1>
 
 <div class="container mt-4">
 
-    @if (@Model.Balances.Count > 0)
+    @if (@Model.Count > 0)
     {
         <div class="card mb-3 shadow-sm px-4">
             <div class="card-body">
                 <ul class="list-group compact-list mt-3" style="list-style: none; padding: 0;">
-                    @await Html.PartialAsync("Partials/_Balance", @Model.Balances)
+                    @await Html.PartialAsync("Partials/_Balance", @Model)
                  </ul>
             </div>
         </div>

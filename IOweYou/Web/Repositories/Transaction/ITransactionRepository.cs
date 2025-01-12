@@ -6,5 +6,6 @@ public interface ITransactionRepository : IDbManagement<Models.Transactions.Tran
 {
     
     Task<List<Models.Transactions.Transaction>> GetTransactionsFromUserId(Guid userId);
+    Task<List<Models.Transactions.Transaction>> GetTransactionsWithUser(User user, User partner);
     Task<bool> CreateTransaction(User user, User partner, Models.Transactions.Currency currency, decimal amount);
 }
