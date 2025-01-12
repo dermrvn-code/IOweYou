@@ -1,99 +1,83 @@
 ﻿@using IOweYou.Models.Shared
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewBag.Title - IOU</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/IOweYou.styles.css" asp-append-version="true"/>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>@ViewBag.Title - IOweYou</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/IOweYou.styles.css" asp-append-version="true"/>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-</head>
-<body>
-<!--<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container">
-        <a class="navbar-brand" href="/">IOU</a>
-        <div class="collapse navbar-collapse">
-
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/send">Send Money</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/account">Account</a>
-                </li>
-            </ul>
-        </div>
-
-        
-    </div>
-</nav>-->
-<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">IOU</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/send">Send</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/account">Account</a>
-                </li>
-            </ul>
-            <form class="d-flex" action="/searchUser">
-                <div>
-                    <input class="form-control me-sm-2 search-bar" type="search" id="user-search" name="username" autocomplete="off" placeholder="Enter username...">
-                    @await Html.PartialAsync("_SearchBar", new SearchBarViewModel()
-                    {
-                        Id = "user-search",
-                        Link = "/Search/Usernames",
-                        SendOnClick = true,
-                        ShowMyself = true
-                    })
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <img src="logo.png"/>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/send">Send</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/account">Account</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" action="/searchUser">
+                        <div>
+                            <input class="form-control me-sm-2 search-bar" type="search" id="user-search" name="username" autocomplete="off" placeholder="Enter username...">
+                            @await Html.PartialAsync("_SearchBar", new SearchBarViewModel()
+                            {
+                                Id = "user-search",
+                                Link = "/Search/Usernames",
+                                SendOnClick = true,
+                                ShowMyself = true
+                            })
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
+        </nav>
+
+
+        <div class="container mt-5">
+            @RenderBody()
         </div>
-    </div>
-</nav>
 
-
-<div class="container mt-5">
-    @RenderBody()
-</div>
-
-@if (TempData["InfoBanner"] != null)
-{
-    <div class="info-banner">
-        <div class="alert alert-info text-center w-100 m-0" role="alert">
-            @TempData["InfoBanner"].ToString()
-        </div>
-    </div>
-}
-
-<script>
-
-    $(document).ready(function () {
-        const closeInfoBanner = () => {
-            $(".info-banner").addClass("hide")
-            setTimeout(() => {
-                $(".info-banner").hide()
-            }, 200)
+        @if (TempData["InfoBanner"] != null)
+        {
+            <div class="info-banner">
+                <div class="alert alert-info text-center w-100 m-0" role="alert">
+                    @TempData["InfoBanner"].ToString()
+                </div>
+            </div>
         }
 
-        setTimeout(closeInfoBanner, 5000)
-    })
-    
-    $('.cstm-hr:last').hide();
+        <script>
 
-</script>
+            $(document).ready(function () {
+                const closeInfoBanner = () => {
+                    $(".info-banner").addClass("hide")
+                    setTimeout(() => {
+                        $(".info-banner").hide()
+                    }, 200)
+                }
 
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
-</body>
+                setTimeout(closeInfoBanner, 5000)
+            })
+            
+            $('.cstm-hr:last').hide();
+
+        </script>
+
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
 </html>

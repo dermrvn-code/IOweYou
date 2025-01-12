@@ -26,6 +26,10 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+a.navbar-brand img{
+  width: 4rem;
+}
+
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }

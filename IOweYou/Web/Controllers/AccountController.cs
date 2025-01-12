@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 namespace IOweYou.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
-[AllowAnonymous]
+
 public class AccountController : Controller
 {
     private readonly ILogger<AccountController> _logger;
@@ -25,12 +25,14 @@ public class AccountController : Controller
         _passwordHasher = new PasswordHasher<object>();
     }
     
+    [AllowAnonymous]
     [Route("register")]
     public IActionResult Register()
     {
         return View();
     }
     
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromForm] RegisterViewModel register)
     {
@@ -61,13 +63,15 @@ public class AccountController : Controller
         
         return View();
     }
-
+    
+    [AllowAnonymous]
     [Route("login")]
     public IActionResult Login()
     {
         return View();
     }
-
+    
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromForm] LoginViewModel login)
     {
@@ -96,19 +100,22 @@ public class AccountController : Controller
         return Redirect("/");
     }
     
+    [AllowAnonymous]
     [HttpGet("logout")]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return Redirect("/login");
     }
-
+    
+    [AllowAnonymous]
     [Route("forgotpassword")]
     public IActionResult ForgotPassword()
     {
         return View();
     }
-
+    
+    [AllowAnonymous]
     [HttpPost("forgotpassword")]
     public async Task<IActionResult> ForgotPassword([FromForm] ForgotPasswordViewModel fp)
     {
@@ -119,5 +126,15 @@ public class AccountController : Controller
         //if (user is not null)
             
         return View();
+    }
+    
+    [Route("account")]
+    public async Task<IActionResult> Account()
+    {
+        var contextUser = HttpContext.User;
+        var user = await _userService.GetUserByClaim(contextUser);
+        if(user == null) return Redirect("logout");
+        
+        return View(user);
     }
 }

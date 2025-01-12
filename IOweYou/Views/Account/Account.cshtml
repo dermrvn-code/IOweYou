@@ -1,0 +1,27 @@
+@model IOweYou.Models.User
+@{
+    ViewBag.Title = "Your Account";
+}
+
+<div class="text-center">
+    <h1 class="text-primary">Your Account</h1>
+    <h5>@Model.Username</h5>
+    <p class="text-secondary">Since @Model.DateCreated.ToString("dd.MM.yyyy")</p>
+</div>
+
+<div class="container mt-4">
+    <div class="mt-2 d-grid gap-2 w-50 m-auto">
+        <a class="btn btn-secondary">Change Username</a>
+        <a class="btn btn-secondary">Change E-Mail</a>
+        <a class="btn btn-secondary">Change Password</a>
+        <a class="btn btn-danger">Delete Account</a>
+    </div>
+</div>
+
+
+
+
+
+<div class="container mt-4">
+    
+</div>
