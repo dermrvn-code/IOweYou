@@ -16,7 +16,7 @@ public class DatabaseController : ControllerBase
     }
     
     [AllowAnonymous]
-    [HttpGet("check-db")]
+    [Route("check-db")]
     public async Task<IActionResult> TestConnection()
     {
         try

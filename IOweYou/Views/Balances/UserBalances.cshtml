@@ -1,0 +1,29 @@
+﻿@model IOweYou.ViewModels.Balances.UserBalancesViewModel
+@{
+    ViewBag.Title = "Balances";
+}
+<h1 class="text-center">Balances with <a href="/user/@Model.ToUser.Username" class="text-primary">@Model.ToUser.Username</a></h1>
+
+<div class="container mt-4">
+
+    @if (@Model.Balances.Count > 0)
+    {
+        <div class="card mb-3 shadow-sm px-4">
+            <div class="card-body">
+                <ul class="list-group compact-list mt-3" style="list-style: none; padding: 0;">
+                    @await Html.PartialAsync("Partials/_Balance", @Model.Balances)
+                 </ul>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center" role="alert">
+            You have no outstanding Balances
+        </div>
+    }
+</div>
+
+<script>
+    $('.cstm-hr:last').hide();
+</script>

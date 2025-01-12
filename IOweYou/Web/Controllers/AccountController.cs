@@ -25,7 +25,7 @@ public class AccountController : Controller
         _passwordHasher = new PasswordHasher<object>();
     }
     
-    [HttpGet("register")]
+    [Route("register")]
     public IActionResult Register()
     {
         return View();
@@ -62,7 +62,7 @@ public class AccountController : Controller
         return View();
     }
 
-    [HttpGet("login")]
+    [Route("login")]
     public IActionResult Login()
     {
         return View();
@@ -103,7 +103,7 @@ public class AccountController : Controller
         return Redirect("/login");
     }
 
-    [HttpGet("forgotpassword")]
+    [Route("forgotpassword")]
     public IActionResult ForgotPassword()
     {
         return View();

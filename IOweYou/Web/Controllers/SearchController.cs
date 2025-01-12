@@ -31,7 +31,6 @@ public class SearchController : Controller
         return Json(users);
     }
     
-    [HttpGet]
     public async Task<IActionResult> Users()
     {
         var users = await _userService.GetAll();
@@ -45,7 +44,6 @@ public class SearchController : Controller
         return Json(currencies);
     }
     
-    [HttpGet]
     public async Task<IActionResult> Transactions()
     {
         var transactions = await _transactionService.GetAll();

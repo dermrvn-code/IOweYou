@@ -16,114 +16,24 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IUserService _userService;
-    private readonly ITransactionService _transactionService;
-    private readonly ICurrencyService _currencyService;
-    private readonly IBalanceService _balanceService;
 
     public HomeController(ILogger<HomeController> logger, 
-        IUserService userService, 
-        ITransactionService transactionService, 
-        ICurrencyService currencyService,
-        IBalanceService balanceService
+        IUserService userService
         )
     {
         _logger = logger;
         _userService = userService;
-        _transactionService = transactionService;
-        _currencyService = currencyService;
-        _balanceService = balanceService;
     }
     
     [Route("/dashboard")]
     public async Task<IActionResult> Dashboard()
     {
-        return await LoadViewWithUser();
-    }
-    
-    [Route("/transactions")]
-    [HttpGet]
-    public async Task<IActionResult> Transactions()
-    {
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
-
-        if (user == null)
-            return Redirect("logout");
-
-        var transactions = await _transactionService.GetTransactionsFromUserId(user.ID);
-        return View(transactions);
-    }
-    
-    [Route("/balances")]
-    [HttpGet]
-    public async Task<IActionResult> Balances()
-    {
-        var contextUser = HttpContext.User;
-        var user = await _userService.GetUserByClaim(contextUser);
-
-        if (user == null)
-            return Redirect("logout");
-
-        var balances = await _balanceService.GetBalancesFromUser(user, excludeZeros: true);
-        return View(balances);
-    }
-    
-    [HttpGet("/send")]
-    public async Task<IActionResult> Send()
-    {
-        ViewBag.CurrencyList = await _currencyService.GetAll();;
-        return View();
-    }
-
-    [HttpPost("/send")]
-    public async Task<IActionResult> Send([FromForm] SendViewModel send)
-    {
-        if (ModelState.IsValid){
-            User? partner = await _userService.FindByUsername(send.UserToSendTo);
-            if (partner == null)
-            {
-                ViewBag.ErrorMessage = "User not found";
-                return View();
-            }
-
-            if (send.Value <= 0)
-            {
-                ViewBag.ErrorMessage = "Please enter a value";
-                return View();
-            }
-
-            var currency = await _currencyService.GetByName(send.Currency);
-            if (currency == null)
-            {
-                ViewBag.ErrorMessage = "Currency not found";
-                return View();
-            }
             
-            var contextUser = HttpContext.User;
-            var thisUser = await _userService.GetUserByClaim(contextUser);
-
-            if (thisUser == null) return Redirect("logout");
-
-            var success = await _transactionService.CreateTransaction(thisUser, partner, currency, (decimal)send.Value);
-            if (!success)
-            {
-                ViewBag.ErrorMessage = "Problem with transaction";
-                return View();
-            }
-        }
-
-        return View();
-    }
-    
-    private async Task<IActionResult> LoadViewWithUser()
-    {
-        var contextUser = HttpContext.User;
-        var user = await _userService.GetUserByClaim(contextUser);
-
-        if (user == null)
-            return Redirect("/logout");
+        if(user == null) return Redirect("logout");
         
         return View(user);
-    } 
+    }
 
 }

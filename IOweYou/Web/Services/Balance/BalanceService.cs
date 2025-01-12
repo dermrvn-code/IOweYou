@@ -47,4 +47,10 @@ public class BalanceService : IBalanceService
     {
         return await _balanceRepository.GetBalancesFromUser(user, excludeZeros);
     }
+
+    public async Task<List<Models.Transactions.Balance>> GetBalancesToUser(User fromUser, User toUser,
+        bool excludeZeros)
+    {
+        return await _balanceRepository.GetBalancesToUser(fromUser, toUser, excludeZeros);
+    }
 }

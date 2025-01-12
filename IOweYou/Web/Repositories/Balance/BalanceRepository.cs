@@ -73,5 +73,19 @@ public class BalanceRepository : IBalanceRepository
             .GroupBy(b => b.ToUser)
             .ToListAsync();
     }
+
+    public async Task<List<Models.Transactions.Balance>> GetBalancesToUser(User fromUser, User toUser, bool excludeZeros)
+    {
+        return await _context.Balances
+            .AsNoTracking()
+            .Where(
+                b => b.FromUserId == fromUser.ID 
+                     && b.ToUserId == toUser.ID
+                     && (b.Amount != 0 || !excludeZeros)
+            )
+            .Include(b => b.Currency)
+            .OrderBy(b => b.LastUpdated)
+            .ToListAsync();
+    }
     
 }
