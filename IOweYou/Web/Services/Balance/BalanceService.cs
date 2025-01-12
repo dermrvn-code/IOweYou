@@ -43,12 +43,12 @@ public class BalanceService : IBalanceService
         return await _balanceRepository.GetBalanceByTransaction(transaction);
     }
 
-    public async Task<List<IGrouping<User, Models.Transactions.Balance>>> GetBalancesFromUser(User user, bool excludeZeros)
+    public async Task<List<IGrouping<Models.User, Models.Transactions.Balance>>> GetBalancesFromUser(Models.User user, bool excludeZeros)
     {
         return await _balanceRepository.GetBalancesFromUser(user, excludeZeros);
     }
 
-    public async Task<List<Models.Transactions.Balance>> GetBalancesToUser(User fromUser, User toUser,
+    public async Task<List<Models.Transactions.Balance>> GetBalancesToUser(Models.User fromUser, Models.User toUser,
         bool excludeZeros)
     {
         return await _balanceRepository.GetBalancesToUser(fromUser, toUser, excludeZeros);

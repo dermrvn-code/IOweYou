@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using IOweYou.Models;
 using IOweYou.ViewModels.Home;
 using IOweYou.Web.Services;
-using IOweYou.Web.Services.Account;
 using IOweYou.Web.Services.Balance;
 using IOweYou.Web.Services.Currency;
 using IOweYou.Web.Services.Transaction;
+using IOweYou.Web.Services.User;
 using Transaction = IOweYou.Models.Transactions.Transaction;
 
 namespace IOweYou.Web.Controllers;
@@ -96,6 +96,11 @@ public class TransactionsController : Controller
             var thisUser = await _userService.GetUserByClaim(contextUser);
 
             if (thisUser == null) return Redirect("logout");
+
+            if (thisUser.ID == partner.ID)
+            {
+                ViewBag.ErrorMessage = "You cannot send yourself";
+            }
 
             var success = await _transactionService.CreateTransaction(thisUser, partner, currency, (decimal)send.Value);
             if (!success)

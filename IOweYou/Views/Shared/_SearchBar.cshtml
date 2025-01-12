@@ -11,14 +11,15 @@
         console.log("Searchbar for @Model.Id loaded")
         const searchBox = $("#@Model.Id");
         const resultBox = $("#@Model.Id-results");
+        var sendOnClick = @Model.SendOnClick.ToString().ToLower()
+        var showMyself = @Model.ShowMyself.ToString().ToLower()
 
         function updateDropdown(searchTerm){
             $.ajax({
-                url: "@Model.Link",
+                url: "@Model.Link?showmyself="+showMyself,
                 type: "GET",
                 data: { searchTerm: searchTerm },
                 success: function (response) {
-                    console.log(response);
 
                     if (response.length === 0) {
                         resultBox.hide();
@@ -30,7 +31,13 @@
                         let item = $("<div class='dropdown-item @Model.Id-item'>" + itemName + "</div>");
                         item.on("click", function () {
                             searchBox.val(itemName);
-                            resultBox.hide();
+                            if (sendOnClick)
+                            {
+                                {
+                                    searchBox.closest('form').submit();
+                                }
+                            }
+                                resultBox.hide();
                         });
                         resultBox.append(item);
                     });

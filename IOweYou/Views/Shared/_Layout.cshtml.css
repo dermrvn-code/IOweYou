@@ -1,6 +1,36 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar form {
+  margin-left: 10px;
+}
+.navbar .form-control {
+  width: 180px;
+  height: 25px; 
+  padding: 5px 10px;
+}
+.navbar .btn-outline-light {
+  padding: 2px 10px;
+  font-size: 14px; 
+}
+
+.navbar .search-bar{
+  background: transparent;
+  color: #fff;
+  border: 1px #fff solid;
+}
+
+.navbar .search-bar::placeholder {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;

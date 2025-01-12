@@ -1,9 +1,7 @@
 using System.Security.Claims;
-using IOweYou.Models;
-using IOweYou.Web.Repositories;
-using IOweYou.Web.Repositories.Account;
+using IOweYou.Web.Repositories.User;
 
-namespace IOweYou.Web.Services.Account;
+namespace IOweYou.Web.Services.User;
 
 public class UserService : IUserService
 {
@@ -15,17 +13,17 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public async Task<List<User>> GetAll()
+    public async Task<List<Models.User>> GetAll()
     {
         return await _userRepository.GetAll();
     }
 
-    public async Task<User?> GetSingle(Guid id)
+    public async Task<Models.User?> GetSingle(Guid id)
     {
         return await _userRepository.GetSingle(id);
     }
 
-    public async Task<bool> Add(User entity)
+    public async Task<bool> Add(Models.User entity)
     {
         return await _userRepository.Add(entity);
     }
@@ -35,34 +33,34 @@ public class UserService : IUserService
         return await _userRepository.Delete(id);
     }
 
-    public async Task<bool> Update(User entity)
+    public async Task<bool> Update(Models.User entity)
     {
         return await _userRepository.Update(entity);
     }
 
-    public async Task<User?> FindByUsername(string username)
+    public async Task<Models.User?> FindByUsername(string username)
     {
         return await _userRepository.FindByUsername(username);
     }
 
-    public async Task<User?> FindByEmail(string email)
+    public async Task<Models.User?> FindByEmail(string email)
     {
         return await _userRepository.FindByEmail(email);
     }
 
-    public async Task<User?> FindByLogin(string login, string passwordHash)
+    public async Task<Models.User?> FindByLogin(string login, string passwordHash)
     {
         return await _userRepository.FindByLogin(login, passwordHash);
     }
 
-    public async Task<User?> GetUserByClaim(ClaimsPrincipal claim)
+    public async Task<Models.User?> GetUserByClaim(ClaimsPrincipal claim)
     {
         return await _userRepository.GetUserByClaim(claim);
     }
 
-    public async Task<List<string>> FindUsernames(string name)
+    public async Task<List<string>> FindUsernames(string name, bool showMyself, Guid myUserId)
     {
-        return await _userRepository.FindUsernames(name);
+        return await _userRepository.FindUsernames(name, showMyself, myUserId);
     }
     
     

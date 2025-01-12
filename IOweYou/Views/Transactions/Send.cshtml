@@ -16,7 +16,7 @@
                         @await Html.PartialAsync("_SearchBar", new SearchBarViewModel()
                         {
                             Id = "recipient",
-                            Link = "/Search/Usernames"
+                            Link = "/Search/Usernames",
                         })
                         <span asp-validation-for="UserToSendTo" class="text-danger"></span>
                     </div>

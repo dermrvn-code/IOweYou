@@ -1,8 +1,8 @@
 using IOweYou.Web.Services;
-using IOweYou.Web.Services.Account;
 using IOweYou.Web.Services.Balance;
 using IOweYou.Web.Services.Currency;
 using IOweYou.Web.Services.Transaction;
+using IOweYou.Web.Services.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IOweYou.Web.Controllers;
@@ -25,9 +25,22 @@ public class SearchController : Controller
     }
     
     [HttpGet]
-    public async Task<IActionResult> Usernames(string searchTerm)
+    public async Task<IActionResult> Usernames(string searchTerm, bool showMyself)
     {
-        var users = await _userService.FindUsernames(searchTerm);
+        Guid userId = Guid.Empty;
+        var contextUser = HttpContext.User;
+        var user = await _userService.GetUserByClaim(contextUser);
+        if (user == null)
+        {
+            showMyself = false;
+        }
+        else
+        {
+            userId = user.ID;
+        }
+        
+        
+        var users = await _userService.FindUsernames(searchTerm, showMyself, userId);
         return Json(users);
     }
     

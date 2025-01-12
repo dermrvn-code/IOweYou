@@ -1,7 +1,7 @@
     using IOweYou.Database;
     using IOweYou.Models;
-    using IOweYou.Web.Services.Account;
     using IOweYou.Web.Services.Balance;
+    using IOweYou.Web.Services.User;
     using Microsoft.EntityFrameworkCore;
 
     namespace IOweYou.Web.Repositories.Transaction;
@@ -64,7 +64,7 @@
             
         }
 
-        public async Task<List<Models.Transactions.Transaction>> GetTransactionsWithUser(User user, User partner)
+        public async Task<List<Models.Transactions.Transaction>> GetTransactionsWithUser(Models.User user, Models.User partner)
         {
             return await _context.Transactions.Where(
                     t => t.UserId == user.ID 
@@ -76,7 +76,7 @@
             
         }
 
-        public async Task<bool> CreateTransaction(User user, User partner, Models.Transactions.Currency currency, decimal amount)
+        public async Task<bool> CreateTransaction(Models.User user, Models.User partner, Models.Transactions.Currency currency, decimal amount)
         {
             var myTransaction = new Models.Transactions.Transaction(user, partner, currency, amount, false);
             var partnerTransaction = myTransaction.Invert();

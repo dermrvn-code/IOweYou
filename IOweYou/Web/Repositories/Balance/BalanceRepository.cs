@@ -61,7 +61,7 @@ public class BalanceRepository : IBalanceRepository
                 .FirstOrDefaultAsync();
     }
 
-    public async Task<List<IGrouping<User, Models.Transactions.Balance>>> GetBalancesFromUser(User user, bool excludeZeros)
+    public async Task<List<IGrouping<Models.User, Models.Transactions.Balance>>> GetBalancesFromUser(Models.User user, bool excludeZeros)
     {
         return await _context.Balances
             .AsNoTracking()
@@ -75,7 +75,7 @@ public class BalanceRepository : IBalanceRepository
             .ToListAsync();
     }
 
-    public async Task<List<Models.Transactions.Balance>> GetBalancesToUser(User fromUser, User toUser, bool excludeZeros)
+    public async Task<List<Models.Transactions.Balance>> GetBalancesToUser(Models.User fromUser, Models.User toUser, bool excludeZeros)
     {
         return await _context.Balances
             .AsNoTracking()

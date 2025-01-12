@@ -1,8 +1,8 @@
 using IOweYou.ViewModels.User;
-using IOweYou.Web.Services.Account;
 using IOweYou.Web.Services.Balance;
 using IOweYou.Web.Services.Currency;
 using IOweYou.Web.Services.Transaction;
+using IOweYou.Web.Services.User;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,6 +36,8 @@ public class UserController : Controller
         var thisUser = await _userService.GetUserByClaim(contextUser);
         if(thisUser == null) return Redirect("logout");
         
+        if(thisUser.Username == username) return Redirect("/account");
+        
         if (username == null) return BadRequest();
         var user = await _userService.FindByUsername(username);
         if(user == null) return NotFound();
@@ -51,5 +53,14 @@ public class UserController : Controller
             Transactions = transactions.Take(3).ToList(),
             Balances = balances.Take(3).ToList()
         });
+    }
+
+    [HttpGet("/searchUser")]
+    public async Task<IActionResult> SearchUser(string username)
+    {
+        var user = await _userService.FindByUsername(username);
+        if(user == null) return NotFound();
+
+        return Redirect("/user/" + user.Username);
     }
 }

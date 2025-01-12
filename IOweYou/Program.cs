@@ -1,12 +1,12 @@
 using IOweYou.Database;
-using IOweYou.Web.Repositories.Account;
 using IOweYou.Web.Repositories.Balance;
 using IOweYou.Web.Repositories.Currency;
 using IOweYou.Web.Repositories.Transaction;
-using IOweYou.Web.Services.Account;
+using IOweYou.Web.Repositories.User;
 using IOweYou.Web.Services.Balance;
 using IOweYou.Web.Services.Currency;
 using IOweYou.Web.Services.Transaction;
+using IOweYou.Web.Services.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;

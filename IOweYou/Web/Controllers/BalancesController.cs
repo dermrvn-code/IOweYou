@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using IOweYou.Models;
 using IOweYou.ViewModels.Home;
 using IOweYou.Web.Services;
-using IOweYou.Web.Services.Account;
 using IOweYou.Web.Services.Balance;
 using IOweYou.Web.Services.Currency;
 using IOweYou.Web.Services.Transaction;
+using IOweYou.Web.Services.User;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Transaction = IOweYou.Models.Transactions.Transaction;
 
