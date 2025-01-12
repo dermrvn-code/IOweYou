@@ -1,3 +1,4 @@
+using IOweYou.Models;
 using IOweYou.Web.Repositories.Balance;
 
 namespace IOweYou.Web.Services.Balance;
@@ -40,5 +41,10 @@ public class BalanceService : IBalanceService
     public async Task<Models.Transactions.Balance?> GetBalanceByTransaction(Models.Transactions.Transaction transaction)
     {
         return await _balanceRepository.GetBalanceByTransaction(transaction);
+    }
+
+    public async Task<List<IGrouping<User, Models.Transactions.Balance>>> GetBalancesFromUser(User user, bool excludeZeros)
+    {
+        return await _balanceRepository.GetBalancesFromUser(user, excludeZeros);
     }
 }

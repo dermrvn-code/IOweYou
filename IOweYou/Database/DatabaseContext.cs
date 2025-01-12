@@ -23,10 +23,6 @@ public class DatabaseContext : DbContext
             .HasForeignKey(t => t.UserId);
         
         modelBuilder.Entity<User>()
-            .Navigation(u => u.Transactions)
-            .AutoInclude();
-        
-        modelBuilder.Entity<User>()
             .HasMany(u => u.Balances)
             .WithOne(b => b.FromUser)
             .HasForeignKey(b => b.FromUserId)

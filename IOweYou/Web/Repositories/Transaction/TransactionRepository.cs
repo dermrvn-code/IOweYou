@@ -89,7 +89,7 @@
             }
             else
             {
-                myBalance.Amount = myBalance.Amount-amount;;
+                myBalance.Amount = myBalance.Amount-amount;
                 await _balanceService.Update(myBalance);
             }
             

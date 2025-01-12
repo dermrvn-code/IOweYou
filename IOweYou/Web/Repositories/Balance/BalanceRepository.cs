@@ -1,4 +1,5 @@
 using IOweYou.Database;
+using IOweYou.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace IOweYou.Web.Repositories.Balance;
@@ -57,6 +58,20 @@ public class BalanceRepository : IBalanceRepository
                 .Include(b => b.FromUser) 
                 .Include(b => b.ToUser)
                 .FirstOrDefaultAsync();
+    }
+
+    public async Task<List<IGrouping<User, Models.Transactions.Balance>>> GetBalancesFromUser(User user, bool excludeZeros)
+    {
+        return await _context.Balances
+            .AsNoTracking()
+            .Where(
+                b => b.FromUserId == user.ID && (b.Amount != 0 || !excludeZeros)
+            )
+            .Include(b => b.Currency)
+            .Include(b => b.ToUser)
+            .OrderBy(b => b.LastUpdated)
+            .GroupBy(b => b.ToUser)
+            .ToListAsync();
     }
     
 }

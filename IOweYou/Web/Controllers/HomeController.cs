@@ -5,6 +5,7 @@ using IOweYou.Models;
 using IOweYou.ViewModels.Home;
 using IOweYou.Web.Services;
 using IOweYou.Web.Services.Account;
+using IOweYou.Web.Services.Balance;
 using IOweYou.Web.Services.Currency;
 using IOweYou.Web.Services.Transaction;
 using Transaction = IOweYou.Models.Transactions.Transaction;
@@ -17,13 +18,20 @@ public class HomeController : Controller
     private readonly IUserService _userService;
     private readonly ITransactionService _transactionService;
     private readonly ICurrencyService _currencyService;
+    private readonly IBalanceService _balanceService;
 
-    public HomeController(ILogger<HomeController> logger, IUserService userService, ITransactionService transactionService, ICurrencyService currencyService)
+    public HomeController(ILogger<HomeController> logger, 
+        IUserService userService, 
+        ITransactionService transactionService, 
+        ICurrencyService currencyService,
+        IBalanceService balanceService
+        )
     {
         _logger = logger;
         _userService = userService;
         _transactionService = transactionService;
         _currencyService = currencyService;
+        _balanceService = balanceService;
     }
     
     [Route("/dashboard")]
@@ -44,6 +52,20 @@ public class HomeController : Controller
 
         var transactions = await _transactionService.GetTransactionsFromUserId(user.ID);
         return View(transactions);
+    }
+    
+    [Route("/balances")]
+    [HttpGet]
+    public async Task<IActionResult> Balances()
+    {
+        var contextUser = HttpContext.User;
+        var user = await _userService.GetUserByClaim(contextUser);
+
+        if (user == null)
+            return Redirect("logout");
+
+        var balances = await _balanceService.GetBalancesFromUser(user, excludeZeros: true);
+        return View(balances);
     }
     
     [HttpGet("/send")]
