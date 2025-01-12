@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Transactions;
 using Microsoft.AspNetCore.Mvc;
 using IOweYou.Models;
-using IOweYou.ViewModels.Home;
+using IOweYou.ViewModels.Transactions;
 using IOweYou.Web.Services;
 using IOweYou.Web.Services.Balance;
 using IOweYou.Web.Services.Currency;
@@ -61,10 +61,24 @@ public class TransactionsController : Controller
         return View(transactions);
     }
     
-    [Route("/send")]
-    public async Task<IActionResult> Send()
+    [Route("/send/{username?}")]
+    public async Task<IActionResult> Send(string? username)
     {
-        ViewBag.CurrencyList = await _currencyService.GetAll();;
+        ViewBag.CurrencyList = await _currencyService.GetAll();
+
+        if (!String.IsNullOrEmpty(username))
+        {
+            var user = await _userService.FindByUsername(username);
+
+            if (user != null)
+            {
+                return View(new SendViewModel()
+                {
+                    UserToSendTo = username
+                });
+            }
+        }
+
         return View();
     }
 

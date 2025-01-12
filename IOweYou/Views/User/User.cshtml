@@ -5,9 +5,11 @@
     var balances = @Model.Balances;
     ViewBag.Title = @user.Username;
 }
-<h1 class="text-center text-primary">@user.Username</h1>
+<div class="col text-center">
+    <h1 class="text-primary">@user.Username</h1>
+    <a href="/send/@user.Username" class="btn btn-primary w-25 mt-1">Send</a>
+</div>
 
-<p class="text-center text-secondary">Created at @user.DateCreated.ToString("dd.MM.yyyy")</p>
 
 
 <div class="container mt-4">

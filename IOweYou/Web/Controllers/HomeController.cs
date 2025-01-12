@@ -2,7 +2,6 @@
 using System.Transactions;
 using Microsoft.AspNetCore.Mvc;
 using IOweYou.Models;
-using IOweYou.ViewModels.Home;
 using IOweYou.Web.Services;
 using IOweYou.Web.Services.Balance;
 using IOweYou.Web.Services.Currency;

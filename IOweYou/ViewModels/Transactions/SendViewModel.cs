@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using IOweYou.Models.Shared;
 
-namespace IOweYou.ViewModels.Home;
+namespace IOweYou.ViewModels.Transactions;
 
 public class SendViewModel
 {
