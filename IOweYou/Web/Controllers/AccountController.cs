@@ -140,7 +140,8 @@ public class AccountController : Controller
         return NotFound();
         
     }
-
+    
+    [AllowAnonymous]
     [HttpPost("changepassword")]
     public async Task<IActionResult> ChangePassword([FromForm]ChangePasswordViewModel changePassword)
     {
@@ -189,6 +190,45 @@ public class AccountController : Controller
         
         TempData["InfoBanner"] = "Successfully changed password";
         return Redirect("/account");
+    }
+
+    [Route("changeusername")]
+    public IActionResult ChangeUsername()
+    {
+        return View();
+    }
+
+    [HttpPost("changeusername")]
+    public async Task<IActionResult> ChangeUsername([FromForm] ChangeUsernameViewModel changeUsername)
+    {
+        var contextUser = HttpContext.User;
+        var user = await _userService.GetUserByClaim(contextUser);
+        if(user == null) return Redirect("logout");
+
+        if (user.Username == changeUsername.Username)
+        {
+            ViewBag.ErrorMessage = "Username cannot be the same";
+            return View();
+        }
+        
+        var possibleUser = await _userService.FindByUsername(changeUsername.Username);
+        if (possibleUser != null)
+        {
+            ViewBag.ErrorMessage = "Username is already taken";
+            return View();
+        }
+        
+        user.Username = changeUsername.Username;
+
+        if (!await _userService.Update(user))
+        {
+            ViewBag.ErrorMessage = "Username could not be changed";
+            return View();
+        }
+        
+        TempData["InfoBanner"] = "Successfully changed username";
+        return Redirect("/account");
+        
     }
     
     [Route("account")]
