@@ -141,7 +141,7 @@ namespace IOweYou.Migrations
                     b.HasOne("IOweYou.Models.User", "FromUser")
                         .WithMany("Balances")
                         .HasForeignKey("FromUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("IOweYou.Models.User", "ToUser")

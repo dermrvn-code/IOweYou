@@ -16,17 +16,16 @@ public class DatabaseContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         modelBuilder.Entity<User>()
             .HasMany(u => u.Transactions)
             .WithOne(t => t.User)
             .HasForeignKey(t => t.UserId);
-        
+
         modelBuilder.Entity<User>()
             .HasMany(u => u.Balances)
             .WithOne(b => b.FromUser)
-            .HasForeignKey(b => b.FromUserId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(b => b.FromUserId);
 
         modelBuilder.Entity<Transaction>()
             .HasOne(t => t.Currency);

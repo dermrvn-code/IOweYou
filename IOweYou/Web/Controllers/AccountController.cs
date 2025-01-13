@@ -268,7 +268,24 @@ public class AccountController : Controller
         
         TempData["InfoBanner"] = "Successfully changed email to " + changeEmail.Email;
         return Redirect("/account");
+    }
+    
+
+    [Route("deleteaccount")]
+    public async Task<IActionResult> DeleteAccount()
+    {
+        var contextUser = HttpContext.User;
+        var user = await _userService.GetUserByClaim(contextUser);
+        if(user == null) return Redirect("logout");
+
+        if (!await _userService.Delete(user.ID))
+        {
+            TempData["InfoBanner"] = "Account could not be deleted";
+            return Redirect("/account");
+        }
         
+        TempData["InfoBanner"] = "Your account has been deleted";
+        return Redirect("/login");
     }
     
     [Route("account")]
