@@ -58,6 +58,5 @@ a.navbar-brand img{
   animation: slide-out 0.2s ease 0s 1 normal none;
 }
 
-
 @keyframes slide-in {0% { transform: translateY(200%); } 100% { transform: translateY(0);} }
 @keyframes slide-out {0% { transform: translateY(0); } 100% { transform: translateY(200%);} }

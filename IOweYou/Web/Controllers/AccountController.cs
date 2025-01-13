@@ -36,32 +36,29 @@ public class AccountController : Controller
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromForm] RegisterViewModel register)
     {
-        if (ModelState.IsValid)
-        {
-            
-            var existingUserEmail = await _userService.FindByEmail(register.Email);
-            if (existingUserEmail != null){
-                ViewBag.ErrorMessage = "Email is already taken";
-                return View();
-            }
-            
-            var existingUserUsername = await _userService.FindByUsername(register.Username);
-            if (existingUserUsername != null)
-            {
-                ViewBag.ErrorMessage = "Username is already taken";
-                return View();
-            }
-
-            var passwordHashed = _passwordHasher.HashPassword(null, register.Password);
-            var user = new User(register.Username, register.Email, passwordHashed);
-            
-            await _userService.Add(user);
-            
-            return Redirect("/login");
-            
+        if (!ModelState.IsValid) 
+            return View();
+        
+        var existingUserEmail = await _userService.FindByEmail(register.Email);
+        if (existingUserEmail != null){
+            ViewBag.ErrorMessage = "Email is already taken";
+            return View();
         }
         
-        return View();
+        var existingUserUsername = await _userService.FindByUsername(register.Username);
+        if (existingUserUsername != null)
+        {
+            ViewBag.ErrorMessage = "Username is already taken";
+            return View();
+        }
+
+        var passwordHashed = _passwordHasher.HashPassword(null, register.Password);
+        var user = new User(register.Username, register.Email, passwordHashed);
+        
+        await _userService.Add(user);
+        
+        return Redirect("/login");
+        
     }
     
     [AllowAnonymous]
@@ -123,9 +120,75 @@ public class AccountController : Controller
             return View();
         
         var user = _userService.FindByEmail(fp.Email);
-        //if (user is not null)
             
         return View();
+    }
+    
+    [AllowAnonymous]
+    [Route("changepassword/{token?}")]
+    public async Task<IActionResult> ChangePassword(string? token)
+    {
+        if (!string.IsNullOrEmpty(token))
+        {
+            ViewBag.Token = token;
+            return View();
+        }
+        else if (HttpContext.User.Identity?.IsAuthenticated ?? false)
+        {
+            return View();
+        }
+        return NotFound();
+        
+    }
+
+    [HttpPost("changepassword")]
+    public async Task<IActionResult> ChangePassword([FromForm]ChangePasswordViewModel changePassword)
+    {
+        if (!ModelState.IsValid)
+            return View();
+        
+        var contextUser = HttpContext.User;
+        var user = await _userService.GetUserByClaim(contextUser);
+        if(user == null) return Redirect("logout");
+
+        if (!changePassword.UseToken)
+        {
+            var passwordResult = _passwordHasher.VerifyHashedPassword(null, user.PasswordHash, changePassword.OldPassword);
+            if (passwordResult != PasswordVerificationResult.Success)
+            {
+                ViewBag.ErrorMessage = "Wrong password";
+                return View();
+            }
+
+            if (changePassword.NewPassword != changePassword.ConfirmPassword)
+            {
+                ViewBag.ErrorMessage = "Passwords do not match";
+                return View();
+            }
+        }
+        else
+        {
+            
+        }
+        
+        var passwordEqual = _passwordHasher.VerifyHashedPassword(null, user.PasswordHash, changePassword.NewPassword);
+        if (passwordEqual == PasswordVerificationResult.Success)
+        {
+            ViewBag.ErrorMessage = "New password cannot be the same as old password";
+            return View();
+        }
+        
+        var passwordHashed = _passwordHasher.HashPassword(null, changePassword.NewPassword);
+        user.PasswordHash = passwordHashed;
+
+        if (!await _userService.Update(user))
+        {
+            ViewBag.ErrorMessage = "Password could not be changed";
+            return View();
+        }
+        
+        TempData["InfoBanner"] = "Successfully changed password";
+        return Redirect("/account");
     }
     
     [Route("account")]
