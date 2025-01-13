@@ -5,7 +5,7 @@
 
 <div class="text-center">
     <h1 class="text-primary">Your Account</h1>
-    <h5>@Model.Username</h5>
+    <p class="m-0">@Model.Username &bull; @Model.Email</p>
     <p class="text-secondary">Since @Model.DateCreated.ToString("dd.MM.yyyy")</p>
 </div>
 
@@ -13,7 +13,7 @@
     <div class="mt-2 d-grid gap-2 w-50 m-auto">
         <a class="btn btn-outline-primary" href="logout">Logout</a>
         <a class="btn btn-secondary" href="changeusername">Change Username</a>
-        <a class="btn btn-secondary" href="changeemail">Change E-Mail</a>
+        <a class="btn btn-secondary" href="changeemail">Change Email</a>
         <a class="btn btn-secondary" href="changepassword">Change Password</a>
         <a class="btn btn-danger" href="deleteaccount">Delete Account</a>
     </div>

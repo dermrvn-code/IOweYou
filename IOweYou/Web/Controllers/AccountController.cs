@@ -226,7 +226,47 @@ public class AccountController : Controller
             return View();
         }
         
-        TempData["InfoBanner"] = "Successfully changed username";
+        TempData["InfoBanner"] = "Successfully changed username to " + changeUsername.Username;
+        return Redirect("/account");
+        
+    }
+    
+
+    [Route("changeemail")]
+    public IActionResult ChangeEmail()
+    {
+        return View();
+    }
+
+    [HttpPost("changeemail")]
+    public async Task<IActionResult> ChangeEmail([FromForm] ChangeEmailViewModel changeEmail)
+    {
+        var contextUser = HttpContext.User;
+        var user = await _userService.GetUserByClaim(contextUser);
+        if(user == null) return Redirect("logout");
+
+        if (user.Email == changeEmail.Email)
+        {
+            ViewBag.ErrorMessage = "Email cannot be the same";
+            return View();
+        }
+        
+        var possibleUser = await _userService.FindByEmail(changeEmail.Email);
+        if (possibleUser != null)
+        {
+            ViewBag.ErrorMessage = "Email is already in use";
+            return View();
+        }
+        
+        user.Email = changeEmail.Email;
+
+        if (!await _userService.Update(user))
+        {
+            ViewBag.ErrorMessage = "Email could not be changed";
+            return View();
+        }
+        
+        TempData["InfoBanner"] = "Successfully changed email to " + changeEmail.Email;
         return Redirect("/account");
         
     }
