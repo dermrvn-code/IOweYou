@@ -1,3 +1,4 @@
+@using System.Globalization
 @model List<IOweYou.Models.Transactions.Balance>
 
 @foreach (var balance in @Model)
@@ -5,14 +6,16 @@
     if (balance.Amount != 0)
     {
         var color = balance.Amount > 0 ? "positive" : "negative";
+        
         <li class="text-center cstm-list-item">
-            @if ((bool)(ViewData["showUsernamesInBalances"] ?? false))
+            @if ((bool)(ViewData["isDashboard"] ?? false))
             {
                 <a class="text-primary" href="/user/@balance.ToUser.Username">@balance.ToUser.Username</a>
             }
             <div>
                 <span class="@color cstm-currency">@balance.Amount</span> @balance.Currency.Name
             </div>
+            <p class="m-0" style="font-size: 0.6em">Last updated: @balance.LastUpdated.ToString("dd.MM.yyyy, h:mm tt", CultureInfo.InvariantCulture)</p>
             <a class="btn btn-sm btn-outline-primary mt-2" href="resolve/@balance.ID">Resolve</a>
             <hr class="cstm-hr">
         </li>

@@ -43,7 +43,7 @@ public class HomeController : Controller
         var transactions = await _transactionService.GetTransactionsFromUser(user);
         var balances = await _balanceService.GetBalancesFromUser(user, excludeZeros: true);
 
-        ViewData["showUsernamesInBalances"] = true;
+        ViewData["isDashboard"] = true;
         return View(new DashbordViewModel()
         {
             User = user,

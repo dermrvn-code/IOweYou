@@ -1,13 +1,13 @@
 @model IOweYou.Models.Transactions.Transaction
 
-<div class="card mb-3 shadow-sm px-4 transaction m-auto">
+<div class="card mb-3 shadow-sm px-4 transaction m-auto" style="max-width: 750px;">
     <div class="card-body">
         <div class="d-flex align-items-center">
             <div>
                 <p class="text-primary" style="margin: 0">@Model.User.Username</p>
             </div>
             <div class="text-center d-flex flex-column justify-content-between align-content-center ms-3 me-3" style="flex-grow: 1">
-                <p style="margin: 0">@Model.Amount @Model.Currency.Name</p>
+                <p style="margin: 0; margin-bottom: 8px; font-weight: bold">@Model.Amount @Model.Currency.Name</p>
                 @if (Model.Received)
                 {
                     <span class="arrow left"></span>
@@ -16,7 +16,7 @@
                 {
                     <span class="arrow right"></span>
                 }
-                <p class="text-center text-secondary" style="font-size: 0.75rem; margin: 0; font-style: italic">@Model.Date.ToString("ddd, dd.MM.yyyy")</p>
+                <p class="text-center text-secondary" style="font-size: 0.75rem; margin: 0; font-style: italic; margin-top: 8px;">@Model.Date.ToString("ddd, dd.MM.yyyy")</p>
             </div>
             <div>
                 <p class="text-primary" style="margin: 0"><a href="/user/@Model.Partner.Username">@Model.Partner.Username</a></p>
@@ -26,9 +26,6 @@
 </div>
 
 <style>
-    .transaction{
-        max-width: 750px;
-    }
     .arrow{
         display: inline-block;
         height: 5px;
@@ -46,7 +43,6 @@
     
     .arrow.left::after{
         width: calc(100% - 15px);
-        height: 4px;
         background: darkgray;
         top: 0;
         right: 0;

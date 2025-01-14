@@ -16,6 +16,10 @@ $(".password-field").each((i, obj) => {
     $(obj).wrap($("<div></div>").addClass("password-wrapper")).after(eye)
 })
 
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+
 $(document).ready(function () {
     const closeInfoBanner = () => {
         $(".info-banner").addClass("hide")

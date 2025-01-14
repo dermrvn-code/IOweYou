@@ -6,35 +6,37 @@
     var balances = Model.Balances;
 }
 <div class="text-center">
-    <h1>Welcome @user.Username</h1>
-    <div class="mt-4">
-        <a href="/send" class="btn w-25 btn-primary">Send</a>
+    <h1>Welcome <span class="text-primary fw-bold">@user.Username</span>!</h1>
+    <div class="mt-4 d-flex justify-content-center align-content-center m-auto gap-3">
+        <a href="/send" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="bi-send-fill"></i></a>
+        <a href="/balances" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Balances"><i class="bi-calculator-fill"></i></a>
+        <a href="/transactions" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Transactions"><i class="bi-arrow-left-right"></i></a>
+        <a href="/account" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Account"><i class="bi-person-fill"></i></a>
+
     </div>
 </div>
 
 <div class="container mt-4">
     <div class="row mt-3">
-        <div class="col-md-6">
+        <div class="col-lg-5">
             <div class="p-3">
                 <h4 class="text-center text-primary">Your current balances</h4>
-                <div class="container mt-4">
-                    @if (@balances.Count > 0)
-                    {
-                        <ul class="list-group compact-list mt-3" style="list-style: none; padding: 0;">
-                            @await Html.PartialAsync("_Balance", balances)
-                        </ul>
-                        <a class="btn btn-sm btn-outline-secondary mt-3 w-100" href="/balances">See all balances</a>
-                    }
-                    else
-                    {
-                        <div class="alert alert-info text-center" role="alert">
-                            You have no current Balances
-                        </div>
-                    }
-                </div>
+                @if (@balances.Count > 0)
+                {
+                    <ul class="list-group compact-list" style="list-style: none; padding: 0;">
+                        @await Html.PartialAsync("_Balance", balances)
+                    </ul>
+                    <a class="btn btn-sm btn-outline-secondary mt-3 w-100" href="/balances">See all balances</a>
+                }
+                else
+                {
+                    <div class="alert alert-info text-center" role="alert">
+                        You have no current Balances
+                    </div>
+                }
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-lg-7">
             <div class="p-3">
                 <h4 class="text-center text-primary">Your current transactions</h4>
                 
