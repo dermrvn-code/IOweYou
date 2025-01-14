@@ -50,7 +50,9 @@ public class BalanceRepository : IBalanceRepository
 
     public async Task<Models.Transactions.Balance?> GetBalanceByTransaction(Models.Transactions.Transaction transaction)
     {
-        return await _context.Balances.Where(
+        return await _context.Balances
+                .AsNoTracking()
+                .Where(
                 b => b.CurrencyId == transaction.Currency.ID
                      && b.FromUserId == transaction.User.ID
                      && b.ToUserId == transaction.Partner.ID
@@ -59,6 +61,19 @@ public class BalanceRepository : IBalanceRepository
                 .Include(b => b.FromUser) 
                 .Include(b => b.ToUser)
                 .FirstOrDefaultAsync();
+    }
+
+    public async Task<Models.Transactions.Balance?> GetBalanceByUsersAndCurr(Models.User user, Models.User partner, Models.Transactions.Currency currency)
+    {
+        return await _context.Balances
+            .AsNoTracking()
+            .Where(
+                b => b.CurrencyId == currency.ID
+                     && b.FromUserId == user.ID
+                     && b.ToUserId == partner.ID
+            )
+            .Include(b => b.Currency)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<List<IGrouping<Models.User, Models.Transactions.Balance>>> GetBalancesFromUserGrouped(Models.User user, bool excludeZeros)

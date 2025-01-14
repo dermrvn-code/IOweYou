@@ -50,12 +50,63 @@
                     {
                         <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
                     }
-                    <div class="alert alert-secondary">Your new balance with dermrvn will be <span style="color:red">-3</span> Kebab</div>
+                    <div class="alert alert-secondary new-balance-info" style="display: none">Your new balance with dermrvn will be <span style="color:red">-3</span> Kebab</div>
                     <button type="submit" class="btn btn-primary w-100">Send</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+
+    const userField = $("input[name=UserToSendTo]")
+    const amountField = $("input[name=Value]")
+    const currencyField = $("select[name=Currency]")
+    
+    const updateDisplay = () => {
+        const info = $(".new-balance-info")
+        
+        let username = userField.val();
+        let amount = amountField.val();
+        let currency = currencyField.val();
+        
+        if (username && amount && currency){
+            console.log(username, amount, currency)
+            $.ajax({
+                url: "/Search/BalanceWithPartner",
+                type: "GET",
+                data: { partnerName: username, currency: currency },
+                success: function (response) {
+
+                    const setNewInfo = (username, newBalance, currency) => {
+                        let newBalanceObj = $("<span></span>").text(newBalance).css("color", newBalance > 0 ? "green" : "red")
+                        info.empty()
+                        info.append("Your new balance with ", username, " will be ", newBalanceObj, " ", currency);
+                        info.show();
+                    }
+
+                    if (amount < 0 || response.length === 0) {
+                        info.hide();
+                        return;
+                    }
+                    
+                    if (response === "NotYet"){
+                        setNewInfo(username, -amount, currency)
+                    }else{
+                        let current = response["amount"]
+                        setNewInfo(username, current-amount, currency)
+                    }
+                }
+            });
+        }
+        
+    }
+
+    userField.on("keyup", updateDisplay)
+    amountField.on("keyup", updateDisplay)
+    currencyField.on("change", updateDisplay)
+    
+</script>
 
 

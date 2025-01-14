@@ -1,3 +1,4 @@
+using IOweYou.Models.Transactions;
 using IOweYou.Web.Services;
 using IOweYou.Web.Services.Balance;
 using IOweYou.Web.Services.Currency;
@@ -30,17 +31,9 @@ public class SearchController : Controller
         Guid userId = Guid.Empty;
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
-        if (user == null)
-        {
-            showMyself = false;
-        }
-        else
-        {
-            userId = user.ID;
-        }
+        if (user == null) return Redirect("logout");
         
-        
-        var users = await _userService.FindUsernames(searchTerm, showMyself, userId);
+        var users = await _userService.FindUsernames(searchTerm, showMyself, user.ID);
         return Json(users);
     }
     
@@ -73,5 +66,23 @@ public class SearchController : Controller
         
         var balances = await _balanceService.GetBalancesFromUserGrouped(user, excludeZeros: true);
         return Json(balances);
+    }
+
+    public async Task<IActionResult> BalanceWithPartner(string partnerName, string currency)
+    {
+        var contextUser = HttpContext.User;
+        var user = await _userService.GetUserByClaim(contextUser);
+        if (user == null) return Redirect("logout");
+
+        var partner = await _userService.FindByUsername(partnerName);
+        if (partner == null) return NotFound();
+        
+        var curr = await _currencyService.GetByName(currency);
+        if (curr == null) return NotFound();
+        //return Json(curr);
+
+        var balance = await _balanceService.GetBalanceByUsersAndCurr(user, partner, curr);
+        
+        return Json(balance != null ? balance : "NotYet");
     }
 }
