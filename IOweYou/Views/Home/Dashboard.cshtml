@@ -1,15 +1,60 @@
-﻿@model User
+﻿@model IOweYou.ViewModels.Home.DashbordViewModel
 @{
     ViewBag.Title = "Dashboard";
+    var user = Model.User;
+    var transactions = Model.Transactions;
+    var balances = Model.Balances;
 }
 <div class="text-center">
-    <h1>Welcome @Model.Username</h1>
+    <h1>Welcome @user.Username</h1>
     <div class="mt-4">
         <a href="/send" class="btn w-25 btn-primary">Send</a>
     </div>
-    
-    <div class="mt-4">
-        <a href="/balances" class="btn btn-outline-primary">View Balances</a>
-        <a href="/transactions" class="btn btn-outline-primary">View Transactions</a>
+</div>
+
+<div class="container mt-4">
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="p-3">
+                <h4 class="text-center text-primary">Your current balances</h4>
+                <div class="container mt-4">
+                    @if (@balances.Count > 0)
+                    {
+                        <ul class="list-group compact-list mt-3" style="list-style: none; padding: 0;">
+                            @await Html.PartialAsync("_Balance", balances)
+                        </ul>
+                        <a class="btn btn-sm btn-outline-secondary mt-3 w-100" href="/balances">See all balances</a>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info text-center" role="alert">
+                            You have no current Balances
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="p-3">
+                <h4 class="text-center text-primary">Your current transactions</h4>
+                
+                @if (transactions.Count > 0)
+                {
+                    @foreach (var transaction in transactions)
+                    {
+                        @await Html.PartialAsync("_Transaction", transaction)
+                    }
+                    <a href="/transactions" class="btn w-100 btn-outline-secondary">View all transactions</a>
+                }
+                else
+                {
+                    <div class="alert alert-info text-center" role="alert">
+                        You have no current transactions
+                    </div>
+                }
+                
+                
+            </div>
+        </div>
     </div>
 </div>

@@ -41,7 +41,7 @@ public class TransactionsController : Controller
             
         if(user == null) return Redirect("logout");
 
-        var transactions = await _transactionService.GetTransactionsFromUserId(user.ID);
+        var transactions = await _transactionService.GetTransactionsFromUser(user);
         return View(transactions);
     }
     

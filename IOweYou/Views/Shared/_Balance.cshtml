@@ -6,6 +6,10 @@
     {
         var color = balance.Amount > 0 ? "positive" : "negative";
         <li class="text-center cstm-list-item">
+            @if ((bool)(ViewData["showUsernamesInBalances"] ?? false))
+            {
+                <a class="text-primary" href="/user/@balance.ToUser.Username">@balance.ToUser.Username</a>
+            }
             <div>
                 <span class="@color cstm-currency">@balance.Amount</span> @balance.Currency.Name
             </div>

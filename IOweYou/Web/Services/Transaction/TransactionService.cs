@@ -38,9 +38,9 @@ public class TransactionService : ITransactionService
         return await _transactionRepository.Update(entity);
     }
 
-    public async Task<List<Models.Transactions.Transaction>> GetTransactionsFromUserId(Guid userId)
+    public async Task<List<Models.Transactions.Transaction>> GetTransactionsFromUser(Models.User user)
     {
-        return await _transactionRepository.GetTransactionsFromUserId(userId);
+        return await _transactionRepository.GetTransactionsFromUser(user);
     }
 
     public async Task<List<Models.Transactions.Transaction>> GetTransactionsWithUser(Models.User user, Models.User partner)

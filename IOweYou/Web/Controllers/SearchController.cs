@@ -71,7 +71,7 @@ public class SearchController : Controller
         if (user == null)
             return NotFound();
         
-        var balances = await _balanceService.GetBalancesFromUser(user, excludeZeros: true);
+        var balances = await _balanceService.GetBalancesFromUserGrouped(user, excludeZeros: true);
         return Json(balances);
     }
 }

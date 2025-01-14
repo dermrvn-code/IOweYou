@@ -53,10 +53,10 @@
             return true;
         }
 
-        public async Task<List<Models.Transactions.Transaction>> GetTransactionsFromUserId(Guid userId)
+        public async Task<List<Models.Transactions.Transaction>> GetTransactionsFromUser(Models.User user)
         {
             return await _context.Transactions.Where(
-                    t => t.UserId == userId)
+                    t => t.UserId == user.ID)
                 .Include(t => t.User)
                 .Include(t => t.Partner)
                 .OrderByDescending(t => t.Date)

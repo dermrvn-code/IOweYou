@@ -1,13 +1,13 @@
 @model IOweYou.Models.Transactions.Transaction
 
-<div class="card mb-3 shadow-sm px-4">
+<div class="card mb-3 shadow-sm px-4 transaction m-auto">
     <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
             <div>
-                <h3 class="text-primary" style="margin: 0">@Model.User.Username</h3>
+                <p class="text-primary" style="margin: 0">@Model.User.Username</p>
             </div>
-            <div class="text-center">
-                <h4>@Model.Amount @Model.Currency.Name</h4>
+            <div class="text-center d-flex flex-column justify-content-between align-content-center ms-3 me-3" style="flex-grow: 1">
+                <p style="margin: 0">@Model.Amount @Model.Currency.Name</p>
                 @if (Model.Received)
                 {
                     <span class="arrow left"></span>
@@ -16,48 +16,64 @@
                 {
                     <span class="arrow right"></span>
                 }
-                <p class="text-center" style="margin: 0; font-style: italic">@Model.Date.ToString("ddd, dd.MM.yyyy")</p>
+                <p class="text-center text-secondary" style="font-size: 0.75rem; margin: 0; font-style: italic">@Model.Date.ToString("ddd, dd.MM.yyyy")</p>
             </div>
-            <div class="text-end">
-                <h3 class="text-primary" style="margin: 0"><a href="/user/@Model.Partner.Username">@Model.Partner.Username</a></h3>
+            <div>
+                <p class="text-primary" style="margin: 0"><a href="/user/@Model.Partner.Username">@Model.Partner.Username</a></p>
             </div>
         </div>
     </div>
 </div>
 
 <style>
+    .transaction{
+        max-width: 750px;
+    }
     .arrow{
-        height: 20px;
+        display: inline-block;
+        height: 5px;
+        width: 100%;
+        position: relative;
     }
 
     .arrow::before, .arrow::after{
-        content: "";
-        display: inline-block;
-        vertical-align: middle;
-        margin: 0;
+        position: absolute;
         width: 0;
         height: 0;
+        content: "";
+        display: inline-block;
+    }
+    
+    .arrow.left::after{
+        width: calc(100% - 15px);
+        height: 4px;
+        background: darkgray;
+        top: 0;
+        right: 0;
     }
 
     .arrow.left::before{
         border-top: 10px solid transparent;
         border-bottom: 10px solid transparent;
-        border-right: 45px solid darkgray;
-    }
-    .arrow.left::after{
-        width: 300px;
-        height: 4px;
-        background: darkgray;
+        border-right: 30px solid darkgray;
+        left: 0;
+        top:  50%;
+        transform: translateY(-50%);
     }
 
     .arrow.right::before{
-        width: 300px;
+        width: calc(100% - 15px);
         height: 4px;
         background: darkgray;
+        top: 0;
+        left: 0;
     }
     .arrow.right::after{
         border-top: 10px solid transparent;
         border-bottom: 10px solid transparent;
-        border-left: 45px solid darkgray;
+        border-left: 30px solid darkgray;
+        right: 0;
+        top:  50%;
+        transform: translateY(-50%);
     }
 </style>

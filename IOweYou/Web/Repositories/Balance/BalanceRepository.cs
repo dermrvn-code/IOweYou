@@ -61,18 +61,29 @@ public class BalanceRepository : IBalanceRepository
                 .FirstOrDefaultAsync();
     }
 
-    public async Task<List<IGrouping<Models.User, Models.Transactions.Balance>>> GetBalancesFromUser(Models.User user, bool excludeZeros)
+    public async Task<List<IGrouping<Models.User, Models.Transactions.Balance>>> GetBalancesFromUserGrouped(Models.User user, bool excludeZeros)
     {
-        return await _context.Balances
+        return await _GetBalanceFromUser(user, excludeZeros)
+            .GroupBy(b => b.ToUser)
+            .ToListAsync();
+    }
+
+    public async Task<List<Models.Transactions.Balance>> GetBalancesFromUser(Models.User user, bool excludeZeros)
+    {
+        return await _GetBalanceFromUser(user, excludeZeros)
+            .ToListAsync();
+    }
+
+    private IOrderedQueryable<Models.Transactions.Balance> _GetBalanceFromUser(Models.User user, bool excludeZeros)
+    {
+        return _context.Balances
             .AsNoTracking()
             .Where(
                 b => b.FromUserId == user.ID && (b.Amount != 0 || !excludeZeros)
             )
             .Include(b => b.Currency)
             .Include(b => b.ToUser)
-            .OrderBy(b => b.LastUpdated)
-            .GroupBy(b => b.ToUser)
-            .ToListAsync();
+            .OrderByDescending(b => b.LastUpdated);
     }
 
     public async Task<List<Models.Transactions.Balance>> GetBalancesToUser(Models.User fromUser, Models.User toUser, bool excludeZeros)

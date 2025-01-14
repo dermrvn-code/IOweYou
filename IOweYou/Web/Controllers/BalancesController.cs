@@ -39,7 +39,7 @@ public class BalancesController : Controller
         if(user == null) return Redirect("logout");
 
         
-        var balances = await _balanceService.GetBalancesFromUser(user, excludeZeros: true);
+        var balances = await _balanceService.GetBalancesFromUserGrouped(user, excludeZeros: true);
         return View(balances);
     }
 
