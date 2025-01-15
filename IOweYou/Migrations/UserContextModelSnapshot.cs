@@ -90,6 +90,9 @@ namespace IOweYou.Migrations
                     b.Property<bool>("Received")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("Resolve")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 

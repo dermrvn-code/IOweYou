@@ -18,17 +18,20 @@ public class TransactionsController : Controller
     private readonly IUserService _userService;
     private readonly ITransactionService _transactionService;
     private readonly ICurrencyService _currencyService;
+    private readonly IBalanceService _balanceService;
 
     public TransactionsController(ILogger<TransactionsController> logger, 
         IUserService userService, 
         ITransactionService transactionService, 
-        ICurrencyService currencyService
+        ICurrencyService currencyService,
+        IBalanceService balanceService
         )
     {
         _logger = logger;
         _userService = userService;
         _transactionService = transactionService;
         _currencyService = currencyService;
+        _balanceService = balanceService;
     }
     
     
@@ -73,7 +76,7 @@ public class TransactionsController : Controller
 
             if (user != null)
             {
-                return View(new SendViewModel()
+                return View(new TransactionViewModel()
                 {
                     UserToSendTo = username
                 });
@@ -83,26 +86,23 @@ public class TransactionsController : Controller
         return View();
     }
 
-    [HttpPost("/send")]
-    public async Task<IActionResult> Send([FromForm] SendViewModel send)
+    private async Task<IActionResult> HandleTransaction(TransactionViewModel transaction, bool resolve)
     {
-        ViewBag.CurrencyList = await _currencyService.GetAll();
-        
         if (ModelState.IsValid){
-            User? partner = await _userService.FindByUsername(send.UserToSendTo);
+            User? partner = await _userService.FindByUsername(transaction.UserToSendTo);
             if (partner == null)
             {
                 ViewBag.ErrorMessage = "User not found";
                 return View();
             }
 
-            if (send.Value <= 0)
+            if (transaction.Value <= 0)
             {
                 ViewBag.ErrorMessage = "Please enter a value";
                 return View();
             }
 
-            var currency = await _currencyService.GetByName(send.Currency);
+            var currency = await _currencyService.GetByName(transaction.Currency);
             if (currency == null)
             {
                 ViewBag.ErrorMessage = "Currency not found";
@@ -119,19 +119,63 @@ public class TransactionsController : Controller
                 ViewBag.ErrorMessage = "You cannot send yourself";
             }
 
-            var success = await _transactionService.CreateTransaction(thisUser, partner, currency, (decimal)send.Value);
+            var success = await _transactionService.CreateTransaction(thisUser, partner, currency, (decimal)transaction.Value, resolve);
             if (!success)
             {
                 ViewBag.ErrorMessage = "Problem with transaction";
                 return View();
             }
+
+            if (resolve)
+            {
+                TempData["InfoBanner"] = "Resolved " + transaction.Value + " " + transaction.Currency + " with " + partner.Username;
+            }
+            else
+            {
+                TempData["InfoBanner"] = "Send " + transaction.Value + " " + transaction.Currency + " to " + partner.Username;
+            }
             
-            // TODO find a better solution to this
-            TempData["InfoBanner"] = "Send " + send.Value + " " + send.Currency + " to " + partner.Username;
             return Redirect("/");
         }
-
         return View();
+    }
+
+    [HttpPost("/send")]
+    public async Task<IActionResult> Send([FromForm] TransactionViewModel transaction)
+    {
+        ViewBag.CurrencyList = await _currencyService.GetAll();
+        return await HandleTransaction(transaction, false);
+    }
+
+    [Route("/resolve/{id}")]
+    public async Task<IActionResult> Resolve(string id)
+    {
+        if (string.IsNullOrEmpty(id)) return NotFound();
+
+        var balance = await _balanceService.GetSingle(new Guid(id));
+        if (balance == null) return NotFound();
+
+        if (balance.Amount < 0) return NotFound();
+        
+        var toUser = await _userService.GetSingle(balance.ToUserId);
+        if (toUser == null) return NotFound();
+        
+        var currency = await _currencyService.GetSingle(balance.CurrencyId);
+        if (currency == null) return NotFound();
+
+        return View(new TransactionViewModel()
+        {
+            UserToSendTo = balance.ToUser.Username,
+            Value = (double)balance.Amount,
+            Currency = balance.Currency.Name
+        });
+    }
+    
+    [HttpPost("/resolve/{id}")]
+    public async Task<IActionResult> Resolve([FromForm] TransactionViewModel transaction)
+    {
+        ViewBag.CurrencyList = await _currencyService.GetAll();
+        return await HandleTransaction(transaction, true);
     }
 
 }

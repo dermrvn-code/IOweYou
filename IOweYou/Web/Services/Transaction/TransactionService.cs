@@ -48,9 +48,9 @@ public class TransactionService : ITransactionService
         return await _transactionRepository.GetTransactionsWithUser(user, partner);
     }
 
-    public async Task<bool> CreateTransaction(Models.User user, Models.User partner, Models.Transactions.Currency currency, decimal amount)
+    public async Task<bool> CreateTransaction(Models.User user, Models.User partner, Models.Transactions.Currency currency, decimal amount, bool resolve)
     {
-        return await _transactionRepository.CreateTransaction(user, partner, currency, amount);
+        return await _transactionRepository.CreateTransaction(user, partner, currency, amount, resolve);
     }
 
     

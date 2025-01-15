@@ -76,9 +76,9 @@
             
         }
 
-        public async Task<bool> CreateTransaction(Models.User user, Models.User partner, Models.Transactions.Currency currency, decimal amount)
+        public async Task<bool> CreateTransaction(Models.User user, Models.User partner, Models.Transactions.Currency currency, decimal amount, bool resolve)
         {
-            var myTransaction = new Models.Transactions.Transaction(user, partner, currency, amount, false);
+            var myTransaction = new Models.Transactions.Transaction(user, partner, currency, amount, false, resolve);
             var partnerTransaction = myTransaction.Invert();
                 
             user.Transactions.Add(myTransaction);

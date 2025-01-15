@@ -16,7 +16,10 @@
                 <span class="@color cstm-currency">@balance.Amount</span> @balance.Currency.Name
             </div>
             <p class="m-0" style="font-size: 0.6em">Last updated: @balance.LastUpdated.ToString("dd.MM.yyyy, h:mm tt", CultureInfo.InvariantCulture)</p>
-            <a class="btn btn-sm btn-outline-primary mt-2" href="resolve/@balance.ID">Resolve</a>
+            @if (balance.Amount > 0)
+            {
+                <a class="btn btn-sm btn-outline-primary mt-2" href="/resolve/@balance.ID">Resolve</a>
+            }
             <hr class="cstm-hr">
         </li>
     }

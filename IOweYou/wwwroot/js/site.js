@@ -31,4 +31,55 @@ $(document).ready(function () {
     setTimeout(closeInfoBanner, 5000)
 })
 
+
+
+const userField = $("input[name=UserToSendTo]")
+const amountField = $("input[name=Value]")
+const currencyField = $("[name=Currency]")
+
+const updateDisplay = () => {
+    const info = $(".new-balance-info");
+
+    let username = userField.val();
+    let amount = amountField.val();
+    let currency = currencyField.val();
+
+
+    if (username && amount && currency){
+        $.ajax({
+            url: "/Search/BalanceWithPartner",
+            type: "GET",
+            data: { partnerName: username, currency: currency },
+            success: function (response) {
+
+                const setNewInfo = (username, newBalance, currency) => {
+                    let newBalanceObj = $("<span></span>").text(newBalance).css("color", newBalance < 0 ? "red" : "green")
+                    info.empty()
+                    info.append("Your new balance with ", username, " will be ", newBalanceObj, " ", currency);
+                    info.show();
+                }
+
+                if (amount < 0 || response.length === 0) {
+                    info.hide();
+                    return;
+                }
+
+                if (response === "NotYet"){
+                    info.hide();
+                }else{
+                    let current = response["amount"];
+                    setNewInfo(username, (current-parseInt(amount)), currency)
+                }
+            }
+        });
+    }
+
+}
+
+userField.on("keyup", updateDisplay)
+amountField.on("keyup", updateDisplay)
+currencyField.on("change", updateDisplay)
+
+updateDisplay();
+
 $('.cstm-hr:last').hide();

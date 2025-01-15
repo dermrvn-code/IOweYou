@@ -6,8 +6,19 @@
             <div>
                 <p class="text-primary" style="margin: 0">@Model.User.Username</p>
             </div>
+            @{
+
+                var color = "green";
+                var amount = @Model.Amount;
+                if (!@Model.Received)
+                {
+                    amount = -@Model.Amount;
+                    color = "red";
+                }
+                
+            }
             <div class="text-center d-flex flex-column justify-content-between align-content-center ms-3 me-3" style="flex-grow: 1">
-                <p style="margin: 0; margin-bottom: 8px; font-weight: bold">@Model.Amount @Model.Currency.Name</p>
+                <p style="margin: 0; margin-bottom: 8px; font-weight: bold; color: @color">@amount @Model.Currency.Name @if(Model.Resolve){<span>(resolved)</span>}</p>
                 @if (Model.Received)
                 {
                     <span class="arrow left"></span>

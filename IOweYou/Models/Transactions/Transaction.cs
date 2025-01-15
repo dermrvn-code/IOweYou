@@ -7,6 +7,7 @@ public class Transaction : Entity
     public Guid UserId { get; set; }
     public User User { get; set; }
     public bool Received { get; set; }
+    public bool Resolve { get; set; }
     
     public Guid PartnerId { get; set; }
     public User Partner { get; set; }
@@ -17,7 +18,7 @@ public class Transaction : Entity
     
     public Transaction() {}
 
-    public Transaction(User user, User partner, Currency currency, decimal amount, bool received)
+    public Transaction(User user, User partner, Currency currency, decimal amount, bool received, bool resolve)
     {
         User = user;
         UserId = user.ID;
@@ -26,6 +27,7 @@ public class Transaction : Entity
         Currency = currency;
         Amount = amount;
         Received = received;
+        Resolve = resolve;
         Date = DateTime.Now;
     }
     
@@ -36,7 +38,8 @@ public class Transaction : Entity
             partner: User, 
             currency: Currency, 
             amount: Amount,
-            received: !this.Received
+            received: !this.Received,
+            resolve: Resolve
         );
     }
 }

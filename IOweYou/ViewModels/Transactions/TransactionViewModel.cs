@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IOweYou.ViewModels.Transactions;
 
-public class SendViewModel
+public class TransactionViewModel
 {
     [Required(ErrorMessage = "Please enter a username")]
     public string UserToSendTo { get; set; }
@@ -11,6 +11,5 @@ public class SendViewModel
     public string Currency  { get; set; }
     
     [Required(ErrorMessage = "Please enter the value")]
-    [DataType(DataType.Currency)]
     public double Value { get; set; }
 }

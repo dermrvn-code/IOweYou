@@ -1,0 +1,36 @@
+﻿@using IOweYou.Models.Shared
+@using IOweYou.Models.Transactions
+@model IOweYou.ViewModels.Transactions.TransactionViewModel
+@{
+    ViewBag.Title = "Resolve Balance with";
+}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h3 class="text-center">Resolve Balance</h3>
+                <h5 class="text-center">@Model.Currency &bull; @Model.UserToSendTo</h5>
+                <form method="post">
+                    <input type="text" asp-for="UserToSendTo" hidden/>
+                    <input type="text" asp-for="Currency" hidden/>
+                    <div class="mb-3">
+                        <div class="me-2 w-100">
+                            <label asp-for="Value" class="form-label">Amount</label>
+                            <input type="number" class="form-control" asp-for="Value">
+                            <span asp-validation-for="Value" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+                    }
+                    <div class="alert alert-secondary new-balance-info" style="display: none"></div>
+                    <button type="submit" class="btn btn-primary w-100">Resolve</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
