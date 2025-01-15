@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<img src="placeholder" align="center" width="200px">
+<img width="662" alt="logo" src="https://github.com/user-attachments/assets/c29d8604-30e7-4134-9d5d-6729ecffcb6d" />
 
 <h3 align="center">Web-App for repaying friendly debts</h3>
 
