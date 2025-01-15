@@ -1,8 +1,11 @@
 using IOweYou.Database;
+using IOweYou.Helper;
+using IOweYou.Web.Repositories.APIs;
 using IOweYou.Web.Repositories.Balance;
 using IOweYou.Web.Repositories.Currency;
 using IOweYou.Web.Repositories.Transaction;
 using IOweYou.Web.Repositories.User;
+using IOweYou.Web.Services.APIs;
 using IOweYou.Web.Services.Balance;
 using IOweYou.Web.Services.Currency;
 using IOweYou.Web.Services.Transaction;
@@ -45,6 +48,8 @@ if (string.IsNullOrEmpty(connectionString))
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseMySQL(connectionString));
 
+builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -57,6 +62,15 @@ builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
 builder.Services.AddScoped<IBalanceService, BalanceService>();
+
+builder.Services.AddScoped<IQrCodeRepository, QrCodeRepository>();
+builder.Services.AddScoped<IQrCodeService, QrCodeService>();
+
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER")))
+{
+    EnvHelper.LoadFile(".env");
+}
+builder.Configuration.AddEnvironmentVariables();
 
 
 var app = builder.Build();

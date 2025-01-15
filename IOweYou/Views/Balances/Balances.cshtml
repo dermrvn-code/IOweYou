@@ -18,7 +18,7 @@
                         <ul class="list-group compact-list mt-3" style="list-style: none; padding: 0;">
                             @await Html.PartialAsync("_Balance", group.Take(3).ToList())
                         </ul>
-                        <a class="btn btn-sm btn-outline-secondary mt-3 w-100" href="/balances/@user.ID">See More</a>
+                        <a class="btn btn-sm btn-outline-secondary mt-3 w-100" href="/balances/@user.Username">See More</a>
                     </div>
                 </div>
             }

@@ -3,14 +3,21 @@
     ViewBag.Title = "Your Account";
 }
 
-<div class="text-center">
-    <h1 class="text-primary">Your Account</h1>
-    <p class="m-0">@Model.Username &bull; @Model.Email</p>
-    <p class="text-secondary">Since @Model.DateCreated.ToString("dd.MM.yyyy")</p>
-</div>
 
-<div class="container mt-4">
-    <div class="mt-2 d-grid gap-2 w-50 m-auto">
+<div class="container">
+    
+    <div class="text-center">
+        <h1 class="text-primary">Your Account</h1>
+        <p class="m-0">@Model.Username &bull; @Model.Email</p>
+        <p class="text-secondary m-0">Since @Model.DateCreated.ToString("dd.MM.yyyy")</p>
+    </div>
+    
+    <div class="text-center">
+        <img style="width: 100%; max-width: 200px" src="/api/qr/@Model.Username"/>
+        <h5 class="text-secondary m-0 fst-italic" style="margin-top: -20px !important;">Share your page!</h5>
+    </div>
+
+    <div class="mt-4 d-grid gap-2 w-50 m-auto">
         <a class="btn btn-outline-primary" href="logout">Logout</a>
         <a class="btn btn-secondary" href="changeusername">Change Username</a>
         <a class="btn btn-secondary" href="changeemail">Change Email</a>

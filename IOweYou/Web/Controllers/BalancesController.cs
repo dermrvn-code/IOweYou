@@ -43,16 +43,16 @@ public class BalancesController : Controller
         return View(balances);
     }
 
-    [Route("/balances/{id?}")]
-    public async Task<IActionResult> UserBalances(Guid? id)
+    [Route("/balances/{username?}")]
+    public async Task<IActionResult> UserBalances(string? username)
     {
-        if (id == null) return NotFound();
+        if (string.IsNullOrEmpty(username)) return NotFound();
         
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
         if(user == null) return Redirect("logout");
 
-        var partner = await _userService.GetSingle(id.GetValueOrDefault());
+        var partner = await _userService.FindByUsername(username);
         if(partner == null) return NotFound(); 
         
         ViewBag.Partner = partner;

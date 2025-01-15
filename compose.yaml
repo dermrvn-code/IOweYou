@@ -6,6 +6,8 @@
       dockerfile: IOweYou/Dockerfile
     ports:
       - "5000:80"
+    environment:
+      - QR-CODE-API-KEY=yourqrcodekey
     depends_on:
       - db
 

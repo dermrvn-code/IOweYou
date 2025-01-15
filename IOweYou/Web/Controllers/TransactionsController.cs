@@ -46,14 +46,15 @@ public class TransactionsController : Controller
     }
     
     
-    [Route("/transactions/{id?}")]
-    public async Task<IActionResult> UserTransactions(Guid? id)
+    [Route("/transactions/{username?}")]
+    public async Task<IActionResult> UserTransactions(string? username)
     {
+        if (string.IsNullOrEmpty(username)) return NotFound();
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
         if(user == null) return Redirect("logout");
         
-        var partner = await _userService.GetSingle(id.GetValueOrDefault());
+        var partner = await _userService.FindByUsername(username);
         if(partner == null) return NotFound();
         
         ViewBag.Partner = partner;

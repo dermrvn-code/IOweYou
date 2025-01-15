@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using IOweYou.Models;
 using IOweYou.ViewModels.Account;
-using IOweYou.Web.Services;
 using IOweYou.Web.Services.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
