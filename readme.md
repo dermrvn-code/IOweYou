@@ -1,7 +1,7 @@
 <!-- @format -->
-<center>
+<p align="center"
 <img width="200" align="center" alt="logo" src="https://github.com/user-attachments/assets/c29d8604-30e7-4134-9d5d-6729ecffcb6d" />
-</center>
+</p>
 <h3 align="center">Web-App for repaying friendly debts</h3>
 
 <p align="center">
