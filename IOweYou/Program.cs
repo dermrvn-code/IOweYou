@@ -97,6 +97,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
+await new InitDatabase().InitializeDatabaseAsync(app.Services);
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
