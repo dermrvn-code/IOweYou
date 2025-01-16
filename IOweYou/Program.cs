@@ -102,6 +102,14 @@ using (var scope = app.Services.CreateScope())
     var currencies = scope.ServiceProvider.GetRequiredService<ICurrencyService>();
     await currencies.SyncCurrencies();
 }
+
+await new InitDatabase().InitializeDatabaseAsync(app.Services);
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+    context.Database.Migrate();
+}
     
 app.MapControllerRoute(
     name: "default",

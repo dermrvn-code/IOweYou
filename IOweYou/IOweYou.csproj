@@ -28,7 +28,6 @@
 
     <ItemGroup>
       <Folder Include="Web\" />
-      <Folder Include="Helper\" />
       <Folder Include="Migrations\" />
       <Folder Include="Database\" />
     </ItemGroup>
