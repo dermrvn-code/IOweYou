@@ -77,4 +77,9 @@ public class UserService : IUserService
     {
         return await _userRepository.RemoveToken(token);
     }
+
+    public async void InsertInitUsers()
+    {
+        _userRepository.InsertInitUsers();
+    }
 }

@@ -2,6 +2,7 @@
 using IOweYou.Database;
 using IOweYou.Migrations;
 using IOweYou.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace IOweYou.Web.Repositories.User;
@@ -109,5 +110,34 @@ public class UserRepository : IUserRepository
         _context.UserToken.Remove(t);
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public async void InsertInitUsers()
+    {
+        var hasher = new PasswordHasher<object>();
+        
+        var password1 = "isdpassword";
+        var hash = hasher.HashPassword(null, password1);
+        var user1 = new Models.User("isd_user", "isd@testmail.com", hash)
+        {
+            Verified = true
+        };
+        
+        var password2 = "isdpassword2";
+        var hash2 = hasher.HashPassword(null, password2);
+        var user2 = new Models.User("second_isd_user", "isd2@testmail.com", hash2)
+        {
+            Verified = true
+        };
+
+        if (await FindByUsername("isd_user") == null)
+        {
+            await Add(user1);
+        }
+
+        if (await FindByUsername("second_isd_user") == null)
+        {
+            await Add(user2);
+        }
     }
 }
