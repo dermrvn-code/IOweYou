@@ -83,12 +83,6 @@ builder.Configuration.AddEnvironmentVariables();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var currencies = scope.ServiceProvider.GetRequiredService<ICurrencyService>();
-    await currencies.SyncCurrencies();
-}
-
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -102,6 +96,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
+using (var scope = app.Services.CreateScope())
+{
+    var currencies = scope.ServiceProvider.GetRequiredService<ICurrencyService>();
+    await currencies.SyncCurrencies();
+}
     
 app.MapControllerRoute(
     name: "default",
