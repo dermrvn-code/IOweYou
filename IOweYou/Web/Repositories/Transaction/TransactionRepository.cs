@@ -1,4 +1,5 @@
 using IOweYou.Database;
+using IOweYou.Migrations;
 using IOweYou.Web.Services.Balance;
 using IOweYou.Web.Services.User;
 using Microsoft.EntityFrameworkCore;

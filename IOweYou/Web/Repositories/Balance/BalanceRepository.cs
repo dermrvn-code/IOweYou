@@ -1,4 +1,5 @@
 using IOweYou.Database;
+using IOweYou.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace IOweYou.Web.Repositories.Balance;

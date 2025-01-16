@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using IOweYou.Database;
+using IOweYou.Migrations;
 using IOweYou.Models;
 using Microsoft.EntityFrameworkCore;
 

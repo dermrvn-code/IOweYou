@@ -1,5 +1,6 @@
 using IOweYou.Database;
 using IOweYou.Helper;
+using IOweYou.Migrations;
 using IOweYou.Web.Repositories.APIs;
 using IOweYou.Web.Repositories.Balance;
 using IOweYou.Web.Repositories.Currency;
