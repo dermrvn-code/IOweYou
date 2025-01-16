@@ -107,7 +107,7 @@ using (var scope = app.Services.CreateScope())
     await currencies.SyncCurrencies();
     
     var users = scope.ServiceProvider.GetRequiredService<IUserService>();
-    users.InsertInitUsers();
+    await users.InsertInitUsers();
 }
     
 app.MapControllerRoute(
