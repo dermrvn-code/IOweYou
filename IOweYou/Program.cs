@@ -3,11 +3,13 @@ using IOweYou.Helper;
 using IOweYou.Web.Repositories.APIs;
 using IOweYou.Web.Repositories.Balance;
 using IOweYou.Web.Repositories.Currency;
+using IOweYou.Web.Repositories.Mail;
 using IOweYou.Web.Repositories.Transaction;
 using IOweYou.Web.Repositories.User;
 using IOweYou.Web.Services.APIs;
 using IOweYou.Web.Services.Balance;
 using IOweYou.Web.Services.Currency;
+using IOweYou.Web.Services.Mail;
 using IOweYou.Web.Services.Transaction;
 using IOweYou.Web.Services.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -65,6 +67,12 @@ builder.Services.AddScoped<IBalanceService, BalanceService>();
 
 builder.Services.AddScoped<IQrCodeRepository, QrCodeRepository>();
 builder.Services.AddScoped<IQrCodeService, QrCodeService>();
+
+builder.Services.AddScoped<IMailRepository, MailRepository>();
+builder.Services.AddScoped<IMailService, MailService>();
+
+builder.Services.AddSingleton<MailQueue>();
+builder.Services.AddHostedService<BackgroundMailSenderService>();
 
 if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER")))
 {

@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using IOweYou.Models;
 using IOweYou.ViewModels.Account;
+using IOweYou.Web.Services.Mail;
 using IOweYou.Web.Services.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -16,12 +17,14 @@ public class AccountController : Controller
     private readonly ILogger<AccountController> _logger;
     private readonly IUserService _userService;
     private readonly PasswordHasher<object> _passwordHasher;
+    private readonly IMailService _mailService;
 
-    public AccountController(ILogger<AccountController> logger, IUserService userService)
+    public AccountController(ILogger<AccountController> logger, IUserService userService, IMailService mailService)
     {
         _logger = logger;
         _userService = userService;
         _passwordHasher = new PasswordHasher<object>();
+        _mailService = mailService;
     }
     
     [AllowAnonymous]
@@ -93,6 +96,10 @@ public class AccountController : Controller
             CookieAuthenticationDefaults.AuthenticationScheme);
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
             new ClaimsPrincipal(claimsIdentity));
+        
+        _mailService.SendPasswortResetMail(user);
+        
+        
         return Redirect("/");
     }
     
