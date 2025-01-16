@@ -2,7 +2,7 @@
 using IOweYou.Models.Transactions;
 using Microsoft.EntityFrameworkCore;
 
-namespace IOweYou.Database;
+namespace IOweYou.Migrations;
 
 public class DatabaseContext : DbContext
 {
