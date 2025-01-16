@@ -1,5 +1,7 @@
 using IOweYou.Helper;
+using IOweYou.Models;
 using IOweYou.Web.Repositories.User;
+using Microsoft.AspNetCore.Identity;
 using MimeKit;
 
 namespace IOweYou.Web.Repositories.Mail;
@@ -39,31 +41,59 @@ public class MailRepository : IMailRepository
         
         return htmlContent;
     }
-    
-    public void SendPasswortResetMail(Models.User user)
+
+    public async Task<bool> SendMail(Models.User user, string title, string text, string calltoaction, string link, string? email = null, int hoursTillExpire = 1)
     {
-        /*user.PasswordResetToken = passwordHelper.GenerateToken();
-        userRepository.Update(user);*/
-        
         var request = _httpContextAccessor.HttpContext?.Request;
         if (request == null)
             throw new InvalidOperationException("HttpContext is not available");
         
-        
-        string link = $"{request.Scheme}://{request.Host}/changepassword/";
-        
+        UserToken token = new UserToken(user, hoursTillExpire);
+
+        var success = await _userRepository.AddToken(token);
+        if (!success) return false;
+
+
+        link = $"{request.Scheme}://{request.Host}" + link;
+
+        string linkWithToken = link.Replace("{{token}}", token.ID.ToString());
+        string bodyText = $"Hello {user.Username}!<br><br>{text}";
+
+        var address = email == null ? user.Email : email;
         var message = new MimeMessage();
-        message.To.Add(new MailboxAddress("", user.Email));
-        message.Subject = "OOU - Reset Password";
+        message.To.Add(new MailboxAddress("", address));
+        message.Subject = "IOU - " + title;
         message.Body = new TextPart("html") 
         { 
-            Text = CreateHTMLMail("Reset Password", $"Hello {user.Username}!<br><br>You've requested to reset your password!", "Change password", link)
+            Text = CreateHTMLMail(title, bodyText, calltoaction, linkWithToken)
         };
         _mailQueue.Enqueue(message);
+        _logger.LogInformation("Queued mail to "+address);
+        return true;
+    }
+    
+    public async Task<bool> SendPasswortResetMail(Models.User user)
+    {
+        string text = "You've requested to reset your password!";
+        string link = "/changepassword/{{token}}";
+        
+        return await SendMail(user, "Reset Password", text, "Change password", link);
     }
 
-    /*public void SendRegistrationMail(User user)
+    public async Task<bool> SendRegistrationMail(Models.User user)
     {
+        string text = "You've registered to IOU! Please verify your account.";
+        string link = "/verifyaccount/{{token}}";
         
-    }*/
+        return await SendMail(user, "Registration to IOU", text, "Verify account", link, hoursTillExpire: 72);
+    }
+
+    public async Task<bool> SendChangeAdressMail(Models.User user, string newmail)
+    {
+        string hashedMail = Hasher.UrlSecureHashValue(newmail);
+        string text = "You've requested to change your email! Please verify it.";
+        string link = "/validatechangemail/{{token}}?newmail=" + newmail + "&hash=" + hashedMail;
+        
+        return await SendMail(user, "Change your email", text, "Change email", link, email: newmail, hoursTillExpire: 24);
+    }
 }

@@ -31,7 +31,7 @@ public class SearchController : Controller
         Guid userId = Guid.Empty;
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
-        if (user == null) return Redirect("logout");
+        if (user == null) return Redirect("/logout");
         
         var users = await _userService.FindUsernames(searchTerm, showMyself, user.ID);
         return Json(users);
@@ -72,7 +72,7 @@ public class SearchController : Controller
     {
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
-        if (user == null) return Redirect("logout");
+        if (user == null) return Redirect("/logout");
 
         var partner = await _userService.FindByUsername(partnerName);
         if (partner == null) return NotFound();

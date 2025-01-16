@@ -38,7 +38,7 @@ public class HomeController : Controller
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
             
-        if(user == null) return Redirect("logout");
+        if(user == null) return Redirect("/logout");
 
         var transactions = await _transactionService.GetTransactionsFromUser(user);
         var balances = await _balanceService.GetBalancesFromUser(user, excludeZeros: true);

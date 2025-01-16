@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using IOweYou.Database;
+using IOweYou.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace IOweYou.Web.Repositories.User;
@@ -48,8 +49,6 @@ public class UserRepository : IUserRepository
         return true;
     }
     
-    
-    
     public async Task<Models.User?> FindByUsername(string username)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
@@ -94,5 +93,30 @@ public class UserRepository : IUserRepository
                 && (u.ID != myUserId || showMyself)
             )
             .Select(u => u.Username).ToListAsync();
+    }
+
+    public async Task<UserToken?> GetToken(string token)
+    {
+        return await _context.UserToken
+            .AsNoTracking()
+            .Include(t => t.User)
+            .FirstOrDefaultAsync(t => t.ID.ToString() == token);
+    }
+
+    public async Task<bool> AddToken(UserToken token)
+    {
+        var t = await _context.UserToken.AddAsync(token);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> RemoveToken(Guid token)
+    {
+        var t = await _context.UserToken.FindAsync(token);
+        if (t == null) return false;
+        
+        _context.UserToken.Remove(t);
+        await _context.SaveChangesAsync();
+        return true;
     }
 }

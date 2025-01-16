@@ -10,6 +10,9 @@ public class User : Entity
     public string Email { get; set; }
     public string PasswordHash { get; set; }
     public DateTime DateCreated { get; set; }
+    public List<UserToken> Tokens { get; set; } = new List<UserToken>();
+    
+    public bool Verified { get; set; }
     
     public List<Transaction> Transactions { get; set; } = new List<Transaction>();
     public List<Balance> Balances { get; set; } = new List<Balance>();
@@ -29,6 +32,7 @@ public class User : Entity
         Username = username;
         Email = email;
         PasswordHash = passwordHash;
+        Verified = false;
         DateCreated = DateTime.Now;
     }
 }

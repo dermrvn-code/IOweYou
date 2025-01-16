@@ -42,7 +42,7 @@ public class TransactionsController : Controller
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
             
-        if(user == null) return Redirect("logout");
+        if(user == null) return Redirect("/logout");
 
         var transactions = await _transactionService.GetTransactionsFromUser(user);
         return View(transactions);
@@ -55,7 +55,7 @@ public class TransactionsController : Controller
         if (string.IsNullOrEmpty(username)) return NotFound();
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
-        if(user == null) return Redirect("logout");
+        if(user == null) return Redirect("/logout");
         
         var partner = await _userService.FindByUsername(username);
         if(partner == null) return NotFound();
@@ -112,7 +112,7 @@ public class TransactionsController : Controller
             var contextUser = HttpContext.User;
             var thisUser = await _userService.GetUserByClaim(contextUser);
 
-            if (thisUser == null) return Redirect("logout");
+            if (thisUser == null) return Redirect("/logout");
 
             if (thisUser.ID == partner.ID)
             {

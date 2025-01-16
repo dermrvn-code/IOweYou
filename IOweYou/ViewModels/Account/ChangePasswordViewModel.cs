@@ -5,7 +5,7 @@ namespace IOweYou.ViewModels.Account;
 public class ChangePasswordViewModel
 {
     public string Token { get; set; }
-    public bool UseToken { get; set; }
+    public bool UseUserToken { get; set; }
     
     
     

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using IOweYou.Models;
 using IOweYou.Web.Repositories.User;
 
 namespace IOweYou.Web.Services.User;
@@ -62,6 +63,19 @@ public class UserService : IUserService
     {
         return await _userRepository.FindUsernames(name, showMyself, myUserId);
     }
-    
-    
+
+    public async Task<UserToken?> GetToken(string token)
+    {
+        return await _userRepository.GetToken(token);
+    }
+
+    public async Task<bool> AddToken(UserToken token)
+    {
+        return await _userRepository.AddToken(token);
+    }
+
+    public async Task<bool> RemoveToken(Guid token)
+    {
+        return await _userRepository.RemoveToken(token);
+    }
 }

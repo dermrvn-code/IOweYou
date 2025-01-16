@@ -14,8 +14,18 @@ public class MailService : IMailService
     }
 
 
-    public void SendPasswortResetMail(Models.User user)
+    public async Task<bool> SendPasswortResetMail(Models.User user)
     {
-        _mailRepository.SendPasswortResetMail(user);
+        return await _mailRepository.SendPasswortResetMail(user);
+    }
+
+    public async Task<bool> SendRegistrationMail(Models.User user)
+    {
+        return await _mailRepository.SendRegistrationMail(user);
+    }
+
+    public async Task<bool> SendChangeAdressMail(Models.User user, string newmail)
+    {
+        return await _mailRepository.SendChangeAdressMail(user, newmail);
     }
 }

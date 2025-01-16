@@ -36,7 +36,7 @@ public class BalancesController : Controller
     {
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
-        if(user == null) return Redirect("logout");
+        if(user == null) return Redirect("/logout");
 
         
         var balances = await _balanceService.GetBalancesFromUserGrouped(user, excludeZeros: true);
@@ -50,7 +50,7 @@ public class BalancesController : Controller
         
         var contextUser = HttpContext.User;
         var user = await _userService.GetUserByClaim(contextUser);
-        if(user == null) return Redirect("logout");
+        if(user == null) return Redirect("/logout");
 
         var partner = await _userService.FindByUsername(username);
         if(partner == null) return NotFound(); 
