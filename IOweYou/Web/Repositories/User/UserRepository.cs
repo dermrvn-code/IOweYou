@@ -120,6 +120,7 @@ public class UserRepository : IUserRepository
         var hash = hasher.HashPassword(null, password1);
         var user1 = new Models.User("isd_user", "isd@testmail.com", hash)
         {
+            ID = new Guid("e201be7e-a500-46d8-b8a3-08f11b7b3f7c"),
             Verified = true
         };
         
@@ -127,17 +128,11 @@ public class UserRepository : IUserRepository
         var hash2 = hasher.HashPassword(null, password2);
         var user2 = new Models.User("second_isd_user", "isd2@testmail.com", hash2)
         {
+            ID = new Guid("620b15f9-763a-4b4c-ad6b-76b146114f86"),
             Verified = true
         };
-
-        if (await FindByUsername("isd_user") == null)
-        {
-            await Add(user1);
-        }
-
-        if (await FindByUsername("second_isd_user") == null)
-        {
-            await Add(user2);
-        }
+        
+        await Add(user1);
+        await Add(user2);
     }
 }
