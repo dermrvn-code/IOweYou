@@ -18,7 +18,6 @@
 
   db:
     image: mysql:8.0
-    container_name: db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: example

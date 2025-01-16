@@ -99,11 +99,11 @@ app.UseAuthorization();
 
 using (var scope = app.Services.CreateScope())
 {
-    var currencies = scope.ServiceProvider.GetRequiredService<ICurrencyService>();
-    await currencies.SyncCurrencies();
-    
     var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
     context.Database.Migrate();
+    
+    var currencies = scope.ServiceProvider.GetRequiredService<ICurrencyService>();
+    await currencies.SyncCurrencies();
 }
     
 app.MapControllerRoute(
