@@ -37,11 +37,11 @@ public class BackgroundMailSenderService : BackgroundService
         {
             using (var client = new SmtpClient())
             {
-                client.Connect(Environment.GetEnvironmentVariable("HOST"),
-                    int.Parse(Environment.GetEnvironmentVariable("PORT") ?? "587"), SecureSocketOptions.Auto,
+                client.Connect(Environment.GetEnvironmentVariable("SMTPHOST"),
+                    int.Parse(Environment.GetEnvironmentVariable("SMTPPORT") ?? "587"), SecureSocketOptions.Auto,
                     stoppingToken);
-                client.Authenticate(Environment.GetEnvironmentVariable("USERNAME"),
-                    Environment.GetEnvironmentVariable("PASSWORD"));
+                client.Authenticate(Environment.GetEnvironmentVariable("SMTPUSERNAME"),
+                    Environment.GetEnvironmentVariable("SMTPPASSWORD"));
                 client.Send(message);
                 client.Disconnect(true);
             }
