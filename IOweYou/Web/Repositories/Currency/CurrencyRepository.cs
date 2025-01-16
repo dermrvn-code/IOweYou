@@ -5,9 +5,10 @@ namespace IOweYou.Web.Repositories.Currency;
 
 public class CurrencyRepository : ICurrencyRepository
 {
-   
     private readonly DatabaseContext _context;
-    
+
+    private readonly ILogger<CurrencyRepository> _logger;
+
     private readonly List<(string name, decimal unit)> currencies = new()
     {
         ("Coffee", 1),
@@ -21,14 +22,12 @@ public class CurrencyRepository : ICurrencyRepository
         ("Pizza", 10)
     };
 
-    private readonly ILogger<CurrencyRepository> _logger;
-    
     public CurrencyRepository(ILogger<CurrencyRepository> logger, DatabaseContext context)
     {
         _logger = logger;
         _context = context;
     }
-    
+
     public async Task SyncCurrencies()
     {
         foreach (var currency in currencies)
@@ -37,7 +36,7 @@ public class CurrencyRepository : ICurrencyRepository
 
             if (existingCurrency == null)
             {
-                await Add(new Models.Transactions.Currency()
+                await Add(new Models.Transactions.Currency
                 {
                     Name = currency.name,
                     UnitValue = currency.unit
@@ -56,15 +55,12 @@ public class CurrencyRepository : ICurrencyRepository
             .Where(c => !currencyNamesToKeep.Contains(c.Name))
             .ToList();
 
-        if (currenciesToDelete.Any())
-        {
-            _context.Currencies.RemoveRange(currenciesToDelete);
-        }
+        if (currenciesToDelete.Any()) _context.Currencies.RemoveRange(currenciesToDelete);
 
         await _context.SaveChangesAsync();
     }
- 
-    
+
+
     public async Task<List<Models.Transactions.Currency>> GetAll()
     {
         return await _context.Currencies.ToListAsync();
@@ -86,7 +82,7 @@ public class CurrencyRepository : ICurrencyRepository
     {
         var transaction = await _context.Currencies.FindAsync(id);
         if (transaction == null) return false;
-        
+
         _context.Currencies.Remove(transaction);
         await _context.SaveChangesAsync();
         return true;
@@ -106,12 +102,8 @@ public class CurrencyRepository : ICurrencyRepository
 
     public async Task<List<string>> FindCurrencies(string name)
     {
-        if (string.IsNullOrEmpty(name))
-        {
-            return await _context.Currencies.Select(c => c.Name).ToListAsync();
-        }
+        if (string.IsNullOrEmpty(name)) return await _context.Currencies.Select(c => c.Name).ToListAsync();
         return await _context.Currencies.Where(c => c.Name.Contains(name))
             .Select(c => c.Name).ToListAsync();
     }
-    
 }

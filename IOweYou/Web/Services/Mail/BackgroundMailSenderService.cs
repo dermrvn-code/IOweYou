@@ -1,5 +1,4 @@
 using IOweYou.Helper;
-using IOweYou.Web.Repositories.Mail;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
@@ -8,8 +7,8 @@ namespace IOweYou.Web.Services.Mail;
 
 public class BackgroundMailSenderService : BackgroundService
 {
-    private ILogger<BackgroundMailSenderService> _logger;
-    private MailQueue _mailQueue;
+    private readonly ILogger<BackgroundMailSenderService> _logger;
+    private readonly MailQueue _mailQueue;
 
     public BackgroundMailSenderService(ILogger<BackgroundMailSenderService> logger, MailQueue mailQueue)
     {
@@ -38,8 +37,11 @@ public class BackgroundMailSenderService : BackgroundService
         {
             using (var client = new SmtpClient())
             {
-                client.Connect(Environment.GetEnvironmentVariable("HOST"), int.Parse(Environment.GetEnvironmentVariable("PORT") ?? "587"), SecureSocketOptions.Auto, stoppingToken);
-                client.Authenticate(Environment.GetEnvironmentVariable("USERNAME"), Environment.GetEnvironmentVariable("PASSWORD"));
+                client.Connect(Environment.GetEnvironmentVariable("HOST"),
+                    int.Parse(Environment.GetEnvironmentVariable("PORT") ?? "587"), SecureSocketOptions.Auto,
+                    stoppingToken);
+                client.Authenticate(Environment.GetEnvironmentVariable("USERNAME"),
+                    Environment.GetEnvironmentVariable("PASSWORD"));
                 client.Send(message);
                 client.Disconnect(true);
             }

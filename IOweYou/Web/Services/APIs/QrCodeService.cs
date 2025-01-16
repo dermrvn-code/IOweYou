@@ -10,7 +10,7 @@ public class QrCodeService : IQrCodeService
     {
         _qrCodeRepository = qrCodeRepository;
     }
-    
+
     public async Task<Stream?> GetQrCodeForUser(Models.User user)
     {
         return await _qrCodeRepository.GetQrCodeForUser(user);

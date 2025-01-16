@@ -6,13 +6,13 @@ namespace IOweYou.Web.Repositories.APIs;
 
 public class QrCodeRepository : IQrCodeRepository
 {
-   
     private readonly HttpClient _httpClient;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<QrCodeRepository> _logger;
     private readonly IUserService _userService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public QrCodeRepository(ILogger<QrCodeRepository> logger, HttpClient httpClient, IUserService userService, IHttpContextAccessor httpContextAccessor)
+    public QrCodeRepository(ILogger<QrCodeRepository> logger, HttpClient httpClient, IUserService userService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _logger = logger;
         _httpClient = httpClient;
@@ -22,16 +22,16 @@ public class QrCodeRepository : IQrCodeRepository
 
     public async Task<Stream?> GetQrCodeForUser(Models.User user)
     {
-        string? apiKey = Environment.GetEnvironmentVariable("QR-CODE-API-KEY");
-        if(apiKey == null) return null;
-        
+        var apiKey = Environment.GetEnvironmentVariable("QR-CODE-API-KEY");
+        if (apiKey == null) return null;
+
         var request = _httpContextAccessor.HttpContext?.Request;
         if (request == null)
             throw new InvalidOperationException("HttpContext is not available");
 
-        string domain = $"{request.Scheme}://{request.Host}";
-        
-        
+        var domain = $"{request.Scheme}://{request.Host}";
+
+
         var payload = new
         {
             frame_name = "no-frame",
@@ -49,10 +49,10 @@ public class QrCodeRepository : IQrCodeRepository
             marker_right_template = "version7",
             marker_bottom_template = "version6"
         };
-        string endpoint = "https://api.qr-code-generator.com/v1/create?access-token=" + apiKey;
+        var endpoint = "https://api.qr-code-generator.com/v1/create?access-token=" + apiKey;
         var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
         var response = await _httpClient.PostAsync(endpoint, content);
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadAsStreamAsync();
-    } 
+    }
 }

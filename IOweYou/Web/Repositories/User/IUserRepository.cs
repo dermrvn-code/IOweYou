@@ -13,5 +13,4 @@ public interface IUserRepository : IDbManagement<Models.User>
     Task<UserToken?> GetToken(string token);
     Task<bool> AddToken(UserToken token);
     Task<bool> RemoveToken(Guid token);
-
 }

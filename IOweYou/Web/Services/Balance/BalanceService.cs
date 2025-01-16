@@ -1,11 +1,9 @@
-using IOweYou.Models;
 using IOweYou.Web.Repositories.Balance;
 
 namespace IOweYou.Web.Services.Balance;
 
 public class BalanceService : IBalanceService
 {
-    
     private readonly IBalanceRepository _balanceRepository;
 
     public BalanceService(IBalanceRepository balanceRepository)
@@ -49,7 +47,8 @@ public class BalanceService : IBalanceService
         return await _balanceRepository.GetBalanceByUsersAndCurr(user, partner, currency);
     }
 
-    public async Task<List<IGrouping<Models.User, Models.Transactions.Balance>>> GetBalancesFromUserGrouped(Models.User user, bool excludeZeros)
+    public async Task<List<IGrouping<Models.User, Models.Transactions.Balance>>> GetBalancesFromUserGrouped(
+        Models.User user, bool excludeZeros)
     {
         return await _balanceRepository.GetBalancesFromUserGrouped(user, excludeZeros);
     }

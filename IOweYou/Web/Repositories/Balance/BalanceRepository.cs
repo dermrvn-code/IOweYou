@@ -1,18 +1,17 @@
 using IOweYou.Database;
-using IOweYou.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace IOweYou.Web.Repositories.Balance;
 
 public class BalanceRepository : IBalanceRepository
 {
-   
     private readonly DatabaseContext _context;
 
     public BalanceRepository(DatabaseContext context)
     {
         _context = context;
     }
+
     public async Task<List<Models.Transactions.Balance>> GetAll()
     {
         return await _context.Balances.ToListAsync();
@@ -34,7 +33,7 @@ public class BalanceRepository : IBalanceRepository
     {
         var transaction = await _context.Balances.FindAsync(id);
         if (transaction == null) return false;
-        
+
         _context.Balances.Remove(transaction);
         await _context.SaveChangesAsync();
         return true;
@@ -51,19 +50,20 @@ public class BalanceRepository : IBalanceRepository
     public async Task<Models.Transactions.Balance?> GetBalanceByTransaction(Models.Transactions.Transaction transaction)
     {
         return await _context.Balances
-                .AsNoTracking()
-                .Where(
+            .AsNoTracking()
+            .Where(
                 b => b.CurrencyId == transaction.Currency.ID
                      && b.FromUserId == transaction.User.ID
                      && b.ToUserId == transaction.Partner.ID
-                    )
-                .Include(b => b.Currency) 
-                .Include(b => b.FromUser) 
-                .Include(b => b.ToUser)
-                .FirstOrDefaultAsync();
+            )
+            .Include(b => b.Currency)
+            .Include(b => b.FromUser)
+            .Include(b => b.ToUser)
+            .FirstOrDefaultAsync();
     }
 
-    public async Task<Models.Transactions.Balance?> GetBalanceByUsersAndCurr(Models.User user, Models.User partner, Models.Transactions.Currency currency)
+    public async Task<Models.Transactions.Balance?> GetBalanceByUsersAndCurr(Models.User user, Models.User partner,
+        Models.Transactions.Currency currency)
     {
         return await _context.Balances
             .AsNoTracking()
@@ -76,7 +76,8 @@ public class BalanceRepository : IBalanceRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task<List<IGrouping<Models.User, Models.Transactions.Balance>>> GetBalancesFromUserGrouped(Models.User user, bool excludeZeros)
+    public async Task<List<IGrouping<Models.User, Models.Transactions.Balance>>> GetBalancesFromUserGrouped(
+        Models.User user, bool excludeZeros)
     {
         return await _GetBalanceFromUser(user, excludeZeros)
             .GroupBy(b => b.ToUser)
@@ -86,6 +87,21 @@ public class BalanceRepository : IBalanceRepository
     public async Task<List<Models.Transactions.Balance>> GetBalancesFromUser(Models.User user, bool excludeZeros)
     {
         return await _GetBalanceFromUser(user, excludeZeros)
+            .ToListAsync();
+    }
+
+    public async Task<List<Models.Transactions.Balance>> GetBalancesToUser(Models.User fromUser, Models.User toUser,
+        bool excludeZeros)
+    {
+        return await _context.Balances
+            .AsNoTracking()
+            .Where(
+                b => b.FromUserId == fromUser.ID
+                     && b.ToUserId == toUser.ID
+                     && (b.Amount != 0 || !excludeZeros)
+            )
+            .Include(b => b.Currency)
+            .OrderBy(b => b.LastUpdated)
             .ToListAsync();
     }
 
@@ -100,19 +116,4 @@ public class BalanceRepository : IBalanceRepository
             .Include(b => b.ToUser)
             .OrderByDescending(b => b.LastUpdated);
     }
-
-    public async Task<List<Models.Transactions.Balance>> GetBalancesToUser(Models.User fromUser, Models.User toUser, bool excludeZeros)
-    {
-        return await _context.Balances
-            .AsNoTracking()
-            .Where(
-                b => b.FromUserId == fromUser.ID 
-                     && b.ToUserId == toUser.ID
-                     && (b.Amount != 0 || !excludeZeros)
-            )
-            .Include(b => b.Currency)
-            .OrderBy(b => b.LastUpdated)
-            .ToListAsync();
-    }
-    
 }

@@ -4,5 +4,4 @@ namespace IOweYou.Web.Services.APIs;
 
 public interface IQrCodeService : IQrCodeRepository
 {
-    
 }

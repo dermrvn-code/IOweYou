@@ -4,7 +4,6 @@ namespace IOweYou.Web.Services.Currency;
 
 public class CurrencyService : ICurrencyService
 {
-    
     private readonly ICurrencyRepository _currencyRepository;
 
     public CurrencyService(ICurrencyRepository currencyRepository)
@@ -16,7 +15,7 @@ public class CurrencyService : ICurrencyService
     {
         await _currencyRepository.SyncCurrencies();
     }
-    
+
     public async Task<List<Models.Transactions.Currency>> GetAll()
     {
         return await _currencyRepository.GetAll();
