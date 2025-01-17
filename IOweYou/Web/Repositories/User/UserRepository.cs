@@ -9,10 +9,12 @@ namespace IOweYou.Web.Repositories.User;
 
 public class UserRepository : IUserRepository
 {
+    private readonly ILogger<UserRepository> _logger;
     private readonly DatabaseContext _context;
 
-    public UserRepository(DatabaseContext context)
+    public UserRepository(ILogger<UserRepository> logger, DatabaseContext context)
     {
+        _logger = logger;
         _context = context;
     }
 
@@ -131,9 +133,17 @@ public class UserRepository : IUserRepository
             ID = new Guid("620b15f9-763a-4b4c-ad6b-76b146114f86"),
             Verified = true
         };
-        
-        await Add(user1);
-        await Add(user2);
+
+        try
+        {
+            await Add(user1);
+            await Add(user2);
+        }
+        catch
+        {
+            _logger.LogWarning("Initial users could not be created. They possibly already existed");
+            return false;
+        }
         return true;
     }
 }
