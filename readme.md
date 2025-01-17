@@ -71,9 +71,9 @@ The app should now be running on [localhost:5000](http://localhost:5000).
 The app is designed straight forward. After starting the app, you can register a new user.
 For testing and demonstration purposes, you can use one the following credentials:
 
-> **isd_user** `isd_password`
+> **isd_user** `isdpassword`
 
-> **second_isd_user** `isd_password2`
+> **second_isd_user** `isdpassword2`
 
 After logging in you have an overview over all your balances and transactions. In the top right bar you can search for other users (like the second user above) and add a transaction of lets say 2 coffees.
 
