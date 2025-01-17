@@ -83,14 +83,15 @@ Over the account tab you can adjust your profile and also see your accounts QR c
 ## Examples
 <img width="960" alt="Dashboard" src="https://github.com/user-attachments/assets/c1117b05-185b-494a-9f09-13cf7196e122" />
 <p align="center"><i>Dashboard</i></p>
-
+<br><br><br>
 <img width="960" alt="Send" src="https://github.com/user-attachments/assets/9ac40864-3e78-4118-9d84-d35861eb46cf" />
 <p align="center"><i>Sending Page</i></p>
-
+<br><br><br>
 <img width="960" alt="Transactions" src="https://github.com/user-attachments/assets/3048b021-ec8e-4df7-a601-b1d4e52c40eb" />
 <p align="center"><i>Transactions Page</i></p>
-
+<br><br><br>
 <img width="960" alt="Account" src="https://github.com/user-attachments/assets/e0c5a5d2-9e3f-4ae5-8ab8-a0f1204eb4e1" />
-<p align="center"<i>>Account Page (with QR-Code)</i></p>
+<p align="center"<i>Account Page (with QR-Code)</i></p>
+<br><br><br>
 
 [(Back to top)](#table-of-contents)
