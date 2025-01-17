@@ -40,10 +40,10 @@ To add the SMTP settings and the QR-Code API token, you need to adjust the docke
 ```yml
 environment:
   - QR-CODE-API-KEY=yourqrcodekey
-  - HOST=yourhostname
-  - PORT=yourport
-  - USERNAME=yourusername
-  - PASSWORD=yourpassword
+  - SMTPHOST=yourhostname
+  - SMTPPORT=yourport
+  - SMTPUSERNAME=yourusername
+  - SMTPPASSWORD=yourpassword
   - FROMMAILADDRESS=yourmailaddress
 ```
 
